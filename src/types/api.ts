@@ -37,5 +37,5 @@ export interface RequestConfig {
 export interface ErrorResponse {
   code: string
   message: string
-  details?: unknown
+  details?: Record<string, unknown> | null
 }

@@ -39,14 +39,8 @@ export default function AccountInfo({ account, loading = false, onRefresh }: Acc
   }
 
   const getAccountType = () => {
-    switch (account.account_type) {
-      case 'wallet':
-        return <Tag icon={<WalletOutlined />} color="blue">钱包</Tag>
-      case 'contract':
-        return <Tag color="purple">合约</Tag>
-      default:
-        return <Tag color="default">未知</Tag>
-    }
+    // 暂时移除 account_type 相关逻辑
+    return <Tag color="default">未知</Tag>
   }
 
   return (
@@ -114,49 +108,6 @@ export default function AccountInfo({ account, loading = false, onRefresh }: Acc
             </Text>
           </Space>
         </Descriptions.Item>
-
-        <Descriptions.Item label="账户类型">
-          <Space>
-            {getAccountType()}
-            <Text type="secondary">
-              {account.account_type === 'wallet' ? '普通钱包账户' : 
-               account.account_type === 'contract' ? '智能合约账户' : 
-               '未知账户类型'}
-            </Text>
-          </Space>
-        </Descriptions.Item>
-
-        {account.last_transaction_lt && (
-          <Descriptions.Item label="最后交易">
-            <Space direction="vertical" size="small">
-              <Text>
-                <ClockCircleOutlined className="mr-1" />
-                逻辑时间: {account.last_transaction_lt}
-              </Text>
-              {account.last_transaction_hash && (
-                <Text code copyable={{ text: account.last_transaction_hash }}>
-                  哈希: {formatAddress(account.last_transaction_hash)}
-                </Text>
-              )}
-            </Space>
-          </Descriptions.Item>
-        )}
-
-        {account.code_hash && (
-          <Descriptions.Item label="代码哈希">
-            <Text code copyable={{ text: account.code_hash }}>
-              {formatAddress(account.code_hash)}
-            </Text>
-          </Descriptions.Item>
-        )}
-
-        {account.data_hash && (
-          <Descriptions.Item label="数据哈希">
-            <Text code copyable={{ text: account.data_hash }}>
-              {formatAddress(account.data_hash)}
-            </Text>
-          </Descriptions.Item>
-        )}
 
         <Descriptions.Item label="更新时间">
           <Text>

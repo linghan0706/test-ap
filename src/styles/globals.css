@@ -1,4 +1,6 @@
+
 @import 'tailwindcss';
+
 
 /* Ant Design 样式重置 */
 .ant-layout {
@@ -16,6 +18,8 @@
   --primary-color: #1890ff;
   --border-radius: 6px;
   --theme-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --font-jersey-10: 'Jersey 10', cursive;
+  --font-jersey-25: 'Jersey 25', cursive;
 }
 
 @theme inline {
@@ -83,3 +87,4 @@ body {
 .ant-select {
   @apply transition-all duration-200;
 }
+

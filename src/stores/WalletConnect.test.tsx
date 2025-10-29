@@ -1,8 +1,9 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import WalletConnect from '../components/WalletConnect'
+import * as useWalletStoreModule from './useWalletStore'
 
 // 测试用例
-jest.mock('../../stores/useWalletStore', () => ({
+jest.mock('./useWalletStore', () => ({
   useWalletStore: () => ({
     isConnected: false,
     address: null,
@@ -25,17 +26,18 @@ describe('WalletConnect', () => {
 
   it('calls connectWallet when connect button is clicked', async () => {
     const mockConnectWallet = jest.fn()
-    const { useWalletStore } = await import('../../stores/useWalletStore')
-    jest.mocked(useWalletStore).mockReturnValue({
-      isConnected: false,
-      address: null,
-      balance: null,
-      network: 'mainnet',
-      connectWallet: mockConnectWallet,
-      disconnectWallet: jest.fn(),
-      updateBalance: jest.fn(),
-      setNetwork: jest.fn(),
-    })
+    jest
+      .mocked(useWalletStoreModule.useWalletStore)
+      .mockReturnValue({
+        isConnected: false,
+        address: null,
+        balance: null,
+        network: 'mainnet',
+        connectWallet: mockConnectWallet,
+        disconnectWallet: jest.fn(),
+        updateBalance: jest.fn(),
+        setNetwork: jest.fn(),
+      })
 
     render(<WalletConnect />)
 

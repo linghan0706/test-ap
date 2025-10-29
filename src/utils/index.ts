@@ -1,3 +1,4 @@
+
 // 导出所有工具函数
 export * from './format'
 export * from './validation'
@@ -17,17 +18,17 @@ export function delay(ms: number): Promise<void> {
  * @param wait - 等待时间
  * @returns 防抖后的函数
  */
-export function debounce<T extends (...args: never[]) => unknown>(
+export function debounce<T extends (...args: unknown[]) => unknown>(
   func: T,
   wait: number
 ): (...args: Parameters<T>) => void {
   let timeout: NodeJS.Timeout | null = null
-
+  
   return (...args: Parameters<T>) => {
     if (timeout) {
       clearTimeout(timeout)
     }
-
+    
     timeout = setTimeout(() => {
       func(...args)
     }, wait)
@@ -40,12 +41,12 @@ export function debounce<T extends (...args: never[]) => unknown>(
  * @param limit - 限制时间
  * @returns 节流后的函数
  */
-export function throttle<T extends (...args: never[]) => unknown>(
+export function throttle<T extends (...args: unknown[]) => unknown>(
   func: T,
   limit: number
 ): (...args: Parameters<T>) => void {
   let inThrottle: boolean = false
-
+  
   return (...args: Parameters<T>) => {
     if (!inThrottle) {
       func(...args)
@@ -86,3 +87,5 @@ export async function copyToClipboard(text: string): Promise<boolean> {
     return false
   }
 }
+
+

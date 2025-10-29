@@ -8,11 +8,6 @@ export interface TonAccount {
   balance: string
   status: 'active' | 'uninitialized' | 'frozen'
   lastActivity: number
-  account_type?: 'wallet' | 'contract'
-  last_transaction_lt?: string
-  last_transaction_hash?: string
-  code_hash?: string
-  data_hash?: string
 }
 
 export interface TonTransaction {
@@ -53,11 +48,9 @@ export class TonService {
   constructor(network: 'mainnet' | 'testnet' = 'mainnet') {
     const config = networkConfig[network]
     this.apiClient = new ApiClient(config.apiEndpoint, {
-      headers: tonApiConfig.apiKey
-        ? {
-            Authorization: `Bearer ${tonApiConfig.apiKey}`,
-          }
-        : {},
+      headers: tonApiConfig.apiKey ? {
+        'Authorization': `Bearer ${tonApiConfig.apiKey}`
+      } : {}
     })
   }
 
@@ -70,7 +63,7 @@ export class TonService {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : '获取账户信息失败',
+        error: error instanceof Error ? error.message : '获取账户信息失败'
       }
     }
   }
@@ -84,17 +77,17 @@ export class TonService {
       if (response.success && response.data) {
         return {
           success: true,
-          data: response.data.balance,
+          data: response.data.balance
         }
       }
       return {
         success: false,
-        error: response.error || '获取余额失败',
+        error: response.error || '获取余额失败'
       }
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : '获取余额失败',
+        error: error instanceof Error ? error.message : '获取余额失败'
       }
     }
   }
@@ -115,9 +108,9 @@ export class TonService {
       const params = {
         limit: options.limit || 20,
         offset: options.offset || 0,
-        ...options,
+        ...options
       }
-
+      
       return await this.apiClient.get<TonTransaction[]>(
         `/v2/accounts/${address}/transactions`,
         params
@@ -125,7 +118,7 @@ export class TonService {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : '获取交易历史失败',
+        error: error instanceof Error ? error.message : '获取交易历史失败'
       }
     }
   }
@@ -135,13 +128,11 @@ export class TonService {
    */
   async getTransaction(hash: string): Promise<ApiResponse<TonTransaction>> {
     try {
-      return await this.apiClient.get<TonTransaction>(
-        `/v2/transactions/${hash}`
-      )
+      return await this.apiClient.get<TonTransaction>(`/v2/transactions/${hash}`)
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : '获取交易详情失败',
+        error: error instanceof Error ? error.message : '获取交易详情失败'
       }
     }
   }
@@ -155,7 +146,7 @@ export class TonService {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : '获取区块信息失败',
+        error: error instanceof Error ? error.message : '获取区块信息失败'
       }
     }
   }
@@ -163,13 +154,13 @@ export class TonService {
   /**
    * 搜索地址或交易
    */
-  async search(query: string): Promise<ApiResponse<unknown>> {
+  async search(query: string): Promise<ApiResponse<Record<string, unknown>>> {
     try {
-      return await this.apiClient.get(`/v2/search`, { query })
+      return await this.apiClient.get<Record<string, unknown>>(`/v2/search`, { query })
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : '搜索失败',
+        error: error instanceof Error ? error.message : '搜索失败'
       }
     }
   }

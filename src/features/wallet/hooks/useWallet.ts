@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useTonConnectUI } from '@tonconnect/ui-react'
 import { useWalletStore } from '@/stores/useWalletStore'
 import { tonService } from '@/services'
@@ -22,49 +22,6 @@ export function useWallet() {
     updateBalance,
     setNetwork,
   } = useWalletStore()
-
-  // 获取余额
-  const fetchBalance = useCallback(
-    async (walletAddress?: string) => {
-      const targetAddress = walletAddress || address
-      if (!targetAddress) return
-
-      try {
-        setBalanceLoading(true)
-        const response = await tonService.getBalance(targetAddress)
-
-        if (response.success && response.data) {
-          updateBalance(response.data)
-        } else {
-          console.error('Failed to fetch balance:', response.error)
-          message.error('获取余额失败')
-        }
-      } catch (error) {
-        console.error('Balance fetch error:', error)
-        message.error('获取余额失败')
-      } finally {
-        setBalanceLoading(false)
-      }
-    },
-    [address, updateBalance]
-  )
-
-  // 监听钱包连接状态变化
-  useEffect(() => {
-    const unsubscribe = tonConnectUI.onStatusChange(wallet => {
-      if (wallet) {
-        connectWallet(wallet.account.address)
-        // 连接成功后获取余额
-        fetchBalance(wallet.account.address)
-      } else {
-        disconnectWallet()
-      }
-      setIsConnecting(false)
-      setIsDisconnecting(false)
-    })
-
-    return unsubscribe
-  }, [tonConnectUI, connectWallet, disconnectWallet, fetchBalance])
 
   // 连接钱包
   const connect = useCallback(async () => {
@@ -92,6 +49,52 @@ export function useWallet() {
     }
   }, [tonConnectUI])
 
+  // 获取余额
+  const fetchBalance = useCallback(async (walletAddress?: string) => {
+    const targetAddress = walletAddress || address
+    if (!targetAddress) return
+
+    try {
+      setBalanceLoading(true)
+      const response = await tonService.getBalance(targetAddress)
+      
+      if (response.success && response.data) {
+        updateBalance(response.data)
+      } else {
+        console.error('Failed to fetch balance:', response.error)
+        message.error('获取余额失败')
+      }
+    } catch (error) {
+      console.error('Balance fetch error:', error)
+      message.error('获取余额失败')
+    } finally {
+      setBalanceLoading(false)
+    }
+  }, [address, updateBalance])
+
+  const fetchBalanceRef = useRef(fetchBalance);
+
+  useEffect(() => {
+    fetchBalanceRef.current = fetchBalance;
+  }, [fetchBalance]);
+
+  // 监听钱包连接状态变化
+  useEffect(() => {
+    const unsubscribe = tonConnectUI.onStatusChange(wallet => {
+      if (wallet) {
+        connectWallet(wallet.account.address)
+        // 连接成功后获取余额
+        fetchBalanceRef.current(wallet.account.address)
+      } else {
+        disconnectWallet()
+      }
+      setIsConnecting(false)
+      setIsDisconnecting(false)
+    })
+
+    return unsubscribe
+  }, [tonConnectUI, connectWallet, disconnectWallet, fetchBalanceRef])
+
   // 刷新余额
   const refreshBalance = useCallback(() => {
     if (address) {
@@ -100,56 +103,54 @@ export function useWallet() {
   }, [address, fetchBalance])
 
   // 切换网络
-  const switchNetwork = useCallback(
-    (newNetwork: 'mainnet' | 'testnet') => {
-      setNetwork(newNetwork)
-      // 切换网络后重新获取余额
-      if (address) {
-        fetchBalance(address)
-      }
-    },
-    [address, setNetwork, fetchBalance]
-  )
+  const switchNetwork = useCallback((newNetwork: 'mainnet' | 'testnet') => {
+    setNetwork(newNetwork)
+    // 切换网络后重新获取余额
+    if (address) {
+      fetchBalance(address)
+    }
+  }, [address, setNetwork, fetchBalance])
 
   // 发送交易
-  const sendTransaction = useCallback(
-    async (transaction: { to: string; amount: string; comment?: string }) => {
-      if (!tonConnectUI.connected) {
-        message.error('请先连接钱包')
-        return { success: false, error: '钱包未连接' }
+  const sendTransaction = useCallback(async (transaction: {
+    to: string
+    amount: string
+    comment?: string
+  }) => {
+    if (!tonConnectUI.connected) {
+      message.error('请先连接钱包')
+      return { success: false, error: '钱包未连接' }
+    }
+
+    try {
+      const result = await tonConnectUI.sendTransaction({
+        validUntil: Math.floor(Date.now() / 1000) + 300, // 5 minutes expiry
+        messages: [
+          {
+            address: transaction.to,
+            amount: transaction.amount,
+            payload: transaction.comment,
+          },
+        ],
+      })
+
+      message.success('交易发送成功！')
+      
+      // 交易成功后刷新余额
+      setTimeout(() => {
+        refreshBalance()
+      }, 2000)
+
+      return { success: true, data: result }
+    } catch (error) {
+      console.error('Transaction error:', error)
+      message.error('交易发送失败')
+      return { 
+        success: false, 
+        error: error instanceof Error ? error.message : '交易失败' 
       }
-
-      try {
-        const result = await tonConnectUI.sendTransaction({
-          messages: [
-            {
-              address: transaction.to,
-              amount: transaction.amount,
-              payload: transaction.comment,
-            },
-          ],
-          validUntil: Math.floor(Date.now() / 1000) + 300, // 5 minutes from now
-        })
-
-        message.success('交易发送成功！')
-
-        // 交易成功后刷新余额
-        setTimeout(() => {
-          refreshBalance()
-        }, 2000)
-
-        return { success: true, data: result }
-      } catch (error) {
-        console.error('Transaction error:', error)
-        message.error('交易发送失败')
-        return {
-          success: false,
-          error: error instanceof Error ? error.message : '交易失败',
-        }
-      }
-    },
-    [tonConnectUI, refreshBalance]
-  )
+    }
+  }, [tonConnectUI, refreshBalance])
 
   return {
     // 状态

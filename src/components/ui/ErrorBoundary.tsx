@@ -71,6 +71,5 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
 export function useErrorHandler() {
   return (error: Error, errorInfo?: React.ErrorInfo) => {
     console.error('Error caught by error handler:', error, errorInfo)
-    // 这里可以添加错误上报逻辑
   }
 }

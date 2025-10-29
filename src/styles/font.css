@@ -1,0 +1,36 @@
+/* Jersey 字体类 */
+.font-jersey-10 {
+  font-family: var(--font-jersey-10), sans-serif;
+}
+
+.font-jersey-25 {
+  font-family: var(--font-jersey-25), sans-serif;
+}
+
+.test{
+  /* UNI Heart NFT */
+
+position: absolute;
+width: 255px;
+height: 48px;
+left: 69px;
+top: 546px;
+
+font-family: 'Jersey 10';
+font-style: normal;
+font-weight: 400;
+font-size: 54px;
+line-height: 48px;
+/* identical to box height, or 89% */
+display: flex;
+align-items: center;
+text-align: center;
+
+background: linear-gradient(90deg, #1EDDD6 0%, #34E37A 19.8%, #47F04F 36.43%, #81E73B 52.69%, #BAE25B 75.48%, #E377DA 94.23%), linear-gradient(156.71deg, #6B0AE9 2.78%, #6410B1 99.22%), #FFFFFF;
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
+text-fill-color: transparent;
+
+
+}

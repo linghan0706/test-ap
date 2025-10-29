@@ -1,13 +1,13 @@
-import { TonClient, WalletContractV4 } from '@ton/ton'
+import { TonClient, WalletContractV4, Address } from '@ton/ton'
 import { mnemonicToWalletKey } from '@ton/crypto'
 import { TonApiClient } from '@ton-api/client'
 import { tonApiConfig, networkConfig, DEFAULT_NETWORK } from './ton-config'
 
 // TON API 客户端
 export const createTonApiClient = () => {
-  return new TonApiClient({
-    apiKey: tonApiConfig.apiKey,
+  return new TonApiClient({ 
     baseUrl: tonApiConfig.baseUrl,
+    apiKey: tonApiConfig.apiKey
   })
 }
 
@@ -43,4 +43,10 @@ export const createWalletFromMnemonic = async (
 // 获取钱包地址
 export const getWalletAddress = (wallet: WalletContractV4) => {
   return wallet.address.toString()
+}
+
+// 获取钱包余额
+export const getWalletBalance = async (client: TonClient, address: string) => {
+  const balance = await client.getBalance(Address.parse(address))
+  return balance
 }
