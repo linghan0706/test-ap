@@ -18,6 +18,7 @@
     "@ant-design/nextjs-registry": "^1.1.0",
     "@ton-api/client": "^0.4.0",
     "@ton-api/ton-adapter": "^0.4.1",
+    "@ton/core": "^0.62.0",
     "@ton/crypto": "^3.3.0",
     "@ton/ton": "^16.0.0",
     "@tonconnect/sdk": "^3.3.1",
