@@ -2,6 +2,19 @@ import Avatar from 'antd/es/avatar/Avatar'
 import { AntDesignOutlined } from '@ant-design/icons'
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 const powerIcon = (
   <svg
     width="12"
@@ -38,7 +51,7 @@ const tonIcon = (
 
 export default function UserHeader() {
   return (
-    <header className="w-full bg-transparent px-4 py-3 sm:px-6 sm:py-4">
+    <header className="w-full bg-transparent px-4 py-3 sm:px-6 sm:py-4  backdrop-blur-xs">
       <div className="flex items-center justify-between gap-2 sm:gap-4">
         {/* 左侧：头像和用户信息 */}
         <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-shrink">

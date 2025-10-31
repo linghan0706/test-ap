@@ -331,6 +331,10 @@ export default function Loading({ onComplete }: LoadingProps) {
                   width={320}
                   height={240}
                   className="object-contain drop-shadow-2xl"
+                  style={{ 
+                    width: 'auto',
+                    height: 'auto'
+                  }}
                   priority
                 />
               </motion.div>
@@ -533,32 +537,63 @@ export default function Loading({ onComplete }: LoadingProps) {
 
         {/* 底部按钮区域 */}
         <motion.div
-          className="flex justify-center space-x-2 w-full max-w-xs"
+          className="flex justify-center w-full max-w-xs"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.8 }}
         >
-          {/* Skip 按钮 */}
-          <motion.button
-            className="flex-1 py-2 px-4 bg-white rounded-lg text-black font-medium text-sm hover:bg-gray-100 transition-all duration-300"
-            onClick={handleSkip}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            Skip
-          </motion.button>
+          {/* id：6，显示Get in按钮 */}
+          {currentData.id === 6 ? (
+            <motion.button
+              className="text-white font-medium text-sm transition-all duration-300"
+              onClick={handleNext}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+                padding: '4px 10px',
+                gap: '4px',
+                width: '141px',
+                height: '30px',
+                background: 'linear-gradient(156.71deg, #6B0AE9 2.78%, #6410B1 99.22%)',
+                borderRadius: '8px',
+                flex: 'none',
+                order: 0,
+                flexGrow: 0,
+                border: 'none',
+                cursor: 'pointer'
+              }}
+            >
+              Get in
+            </motion.button>
+          ) : (
+            <div className="flex justify-center space-x-2 w-full">
+              {/* Skip 按钮 */}
+              <motion.button
+                className="flex-1 py-2 px-4 bg-white rounded-lg text-black font-medium text-sm hover:bg-gray-100 transition-all duration-300"
+                onClick={handleSkip}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                Skip
+              </motion.button>
 
-          {/* Next Step 按钮 */}
-          <motion.button
-            className="flex-1 py-2 px-4 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg text-white font-medium text-sm hover:from-purple-700 hover:to-blue-700 transition-all duration-300 shadow-lg"
-            onClick={handleNext}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            {currentPage === guidancePages.length - 1
-              ? 'Get Started'
-              : 'Next Step'}
-          </motion.button>
+              {/* Next Step 按钮 */}
+              <motion.button
+                className="flex-1 py-2 px-4 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg text-white font-medium text-sm hover:from-purple-700 hover:to-blue-700 transition-all duration-300 shadow-lg"
+                onClick={handleNext}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                {currentData.id === 6
+                  ? 'Get Started'
+                  : 'Next Step'}
+              </motion.button>
+            </div>
+          )}
         </motion.div>
       </div>
 

@@ -3,6 +3,8 @@
 import { motion } from 'framer-motion'
 
 export default function HomePage() {
+
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-900 via-blue-900 to-black relative overflow-hidden pb-20">
       {/* 主要内容 */}

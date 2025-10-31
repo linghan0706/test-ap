@@ -103,6 +103,10 @@ export default function BottomNavigation() {
                     }
                     ${item.isCenter ? 'filter drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]' : ''}
                   `}
+                  style={{ 
+                    width: 'auto',
+                    height: 'auto'
+                  }}
                 />
                 
                 {/* 激活状态的光晕效果 

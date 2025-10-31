@@ -8,6 +8,9 @@ import zhCN from 'antd/locale/zh_CN'
 import { MainLayout } from '@/components/layout'
 import { LoadingProvider } from '@/components/ui/LoadingProvider'
 
+
+// console.log("userData", Telegram.getTelegramUser());
+
 const inter = Inter({ subsets: ['latin'] })
 const jersey10 = Jersey_10({ 
   subsets: ['latin'],

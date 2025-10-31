@@ -59,10 +59,14 @@ const InitialLoading = ({ onLoadingComplete }: InitialLoadingProps) => {
             <Image
               src="/LoadingIcon/IntiaLoadong.png"
               alt="Nova Explorer Planet"
-              className="object-contain "
+              className="object-contain"
               width={128}
               height={128}
-              style={{ imageRendering: 'pixelated' }}
+              style={{ 
+                imageRendering: 'pixelated',
+                width: 'auto',
+                height: 'auto'
+              }}
               priority
             />
           </div>
@@ -100,7 +104,8 @@ const InitialLoading = ({ onLoadingComplete }: InitialLoadingProps) => {
                   style={{ 
                     imageRendering: 'pixelated',
                     transform: 'rotate(90deg)',
-                    height:'32px'
+                    width: 'auto',
+                    height: 'auto'
                   }}
                 />
               </div>
@@ -141,7 +146,8 @@ const InitialLoading = ({ onLoadingComplete }: InitialLoadingProps) => {
                   style={{ 
                     imageRendering: 'pixelated',
                     transform: 'rotate(-90deg)',
-                    height:'32px'
+                    width: 'auto',
+                    height: 'auto'
                   }}
                 />
               </div>
