@@ -51,20 +51,21 @@ const STORAGE_KEYS = {
   USER: 'telegram_user_info',
   LOGIN_TIME: 'telegram_login_time'
 } as const
-
+// 导出格式化数据
+export const initData=getFormattedInitData();
 /**
  * Telegram Web App 登录函数
  * 使用 getFormattedInitData 返回的数据进行登录
  */
 export async function telegramLogin(): Promise<TelegramLoginResponse | LoginError> {
   try {
-    // 1. 获取 Telegram initData
+    // 1. 获取格式化后的 Telegram initData
     const initDataResult = getFormattedInitData()
     
     if (!initDataResult || !initDataResult.initData) {
       return {
         success: false,
-        message: 'Unable to get Telegram initData. Please make sure you are running in Telegram Web App environment.',
+        message: '无法获取 Telegram initData。请确保在 Telegram Web App 环境中运行。',
         timestamp: Date.now()
       }
     }
@@ -73,7 +74,8 @@ export async function telegramLogin(): Promise<TelegramLoginResponse | LoginErro
     const requestData: TelegramLoginRequest = {
       initData: initDataResult.initData
     }
-    console.log('Sending Telegram login request with initData')
+    console.log('正在发送 Telegram 登录请求...')
+    console.log('InitData:', initDataResult.initData)
 
     // 3. 发送 POST 请求到后端
     const response = await httpUtils.post<TelegramLoginResponse>(

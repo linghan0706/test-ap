@@ -1,21 +1,9 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { useEffect } from 'react'
-import { getFormattedInitData } from '../telegramWebApp/telegrambot'
-import { isUserLoggedIn } from '../utils/api'
+
 
 export default function HomePage() {
-  useEffect(() => {
-    // 打印 initData
-    const initDataResult = getFormattedInitData()
-    console.log('initData:', initDataResult)
-    
-    // 打印登录状态
-    const loginStatus = isUserLoggedIn()
-    console.log('是否登录成功:', loginStatus)
-  }, [])
-
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-900 via-blue-900 to-black relative overflow-hidden pb-20">
       {/* 主要内容 */}
