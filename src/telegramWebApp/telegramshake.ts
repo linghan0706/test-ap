@@ -31,18 +31,18 @@ function vibrateLights() {
 {
   /**其他解决
    * 1、声明全局Telegram变量
-   * 
+   *
    *   declare const Telegram: {
    * WebApp: {
    * HapticFeedback: {
    * impactOccurred: (style: 'light' | 'medium' | 'heavy') => void;
    *  notificationOccurred: (type: 'success' | 'error' | 'warning') => void;
-   *    }; 
+   *    };
    *   };
    * };
-    * 2、使用 TypeScript 的非空断言操作符
-    * function vibrateLight() {
-    *  window.Telegram!.WebApp.HapticFeedback.impactOccurred('light');
-    * }
-    */
+   * 2、使用 TypeScript 的非空断言操作符
+   * function vibrateLight() {
+   *  window.Telegram!.WebApp.HapticFeedback.impactOccurred('light');
+   * }
+   */
 }
