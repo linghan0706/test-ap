@@ -1,38 +1,38 @@
 // 定义 Telegram WebApp 类型
-// interface TelegramWebApp {
-//   HapticFeedback: {
-//     impactOccurred: (style: 'light' | 'medium' | 'heavy') => void
-//     notificationOccurred: (type: 'success' | 'error' | 'warning') => void
-//   }
-// }
-// // 声明 Telegram WebApp 全局变量
-// declare const Telegram: {
-//   WebApp: {
-//     HapticFeedback: {
-//       impactOccurred: (style: 'light' | 'medium' | 'heavy') => void
-//       notificationOccurred: (type: 'success' | 'error' | 'warning') => void
-//     }
-//   }
-// }
+interface TelegramWebApp {
+  HapticFeedback: {
+    impactOccurred: (style: 'light' | 'medium' | 'heavy') => void
+    notificationOccurred: (type: 'success' | 'error' | 'warning') => void
+  }
+}
+// 声明 Telegram WebApp 全局变量
+declare const Telegram: {
+  WebApp: {
+    HapticFeedback: {
+      impactOccurred: (style: 'light' | 'medium' | 'heavy') => void
+      notificationOccurred: (type: 'success' | 'error' | 'warning') => void
+    }
+  }
+}
 
-// interface Window {
-//   Telegram?: {
-//     WebApp: TelegramWebApp
-//   }
-// }
-// // 方式一
-// function vibrateLight() {
-//   window.Telegram.WebApp.HapticFeedback.impactOccurred('light')
-// }
+interface Window {
+  Telegram?: {
+    WebApp: TelegramWebApp
+  }
+}
+// 方式一
+function vibrateLight() {
+  window.Telegram.WebApp.HapticFeedback.impactOccurred('light')
+}
 
-// // 方式二
-// function vibrateLights() {
-//   if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
-//     window.Telegram.WebApp.HapticFeedback.impactOccurred('light')
-//   } else {
-//     console.warn('震动触发：轻微')
-//   }
-// }
+// 方式二
+function vibrateLights() {
+  if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
+    window.Telegram.WebApp.HapticFeedback.impactOccurred('light')
+  } else {
+    console.warn('震动触发：轻微')
+  }
+}
 
 {
   /** 方法调用

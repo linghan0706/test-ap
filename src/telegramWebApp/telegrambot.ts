@@ -113,6 +113,7 @@ export function formatInitDataToQueryString(): string | null {
 
   return params.toString();
 }
+
 function parseInitDataQueryString(raw: string): TelegramInitData {
   const qs = raw.startsWith('?') ? raw.slice(1) : raw;
   const params = new URLSearchParams(qs);
@@ -158,4 +159,3 @@ function parseInitDataQueryString(raw: string): TelegramInitData {
 
   return result;
 }
-
