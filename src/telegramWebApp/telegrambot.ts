@@ -1,6 +1,6 @@
 'use client';
 
-import type { TelegramUser, TelegramInitData, TelegramChat } from '../types';
+import type { TelegramUser, TelegramInitData } from '../types';
 import { retrieveRawInitData, retrieveLaunchParams } from '@telegram-apps/sdk-react';
 
 /**
@@ -13,7 +13,10 @@ export function initializeTelegramApp() {
   }
   try {
     const tg = window.Telegram.WebApp;
-    tg.ready();
+    // 使用类型断言调用 ready 方法（SDK 类型定义可能不完整）
+    if ('ready' in tg && typeof tg.ready === 'function') {
+      tg.ready();
+    }
     return tg;
   } catch (e) {
     console.warn('初始化 Telegram WebApp 失败：', e);
