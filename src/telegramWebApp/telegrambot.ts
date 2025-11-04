@@ -1,64 +1,51 @@
 'use client';
 
-import type { TelegramUser, TelegramInitData, TelegramChat } from '../types';
+import type { TelegramUser, TelegramInitData } from '../types';
+import { retrieveRawInitData, retrieveLaunchParams } from '@telegram-apps/sdk-react';
 
 /**
- * 获取并初始化 Telegram WebApp
+ * 初始化 Telegram WebApp
  */
 export function initializeTelegramApp() {
   if (typeof window === 'undefined' || !window.Telegram?.WebApp) {
     console.warn('当前不在 Telegram WebApp 环境中');
     return null;
   }
-
-  const tg = window.Telegram.WebApp;
-  tg.ready();
-  return tg;
+  try {
+    const tg = window.Telegram.WebApp;
+    // 使用类型断言调用 ready 方法（SDK 类型定义可能不完整）
+    if ('ready' in tg && typeof tg.ready === 'function') {
+      tg.ready();
+    }
+    return tg;
+  } catch (e) {
+    console.warn('初始化 Telegram WebApp 失败：', e);
+    return null;
+  }
 }
 
 /**
- * 获取解析后的 initData
+ * 使用 telegram-apps/sdk-react 获取并解析 initData
  */
 export function getInitData(): TelegramInitData | null {
-  const tg = initializeTelegramApp();
-  if (!tg) return null;
+  if (typeof window === 'undefined') return null;
 
-  const data = tg.initDataUnsafe as {
-    user?: {
-      id: number;
-      first_name: string;
-      username?: string;
-    };
-    auth_date: number;
-    hash: string;
-    start_param?: string;
-    chat?: unknown;
-  };
+  try {
+    // 非 Telegram 环境直接返回 null，避免 SDK 报错日志
+    if (!isTelegramEnvironment()) {
+      return null;
+    }
+    // 使用 SDK 的原生方法获取原始 initData 字符串
+    const raw = retrieveRawInitData();
+    if (!raw) return null;
 
-  if (!data) {
-    console.warn('未检测到 initDataUnsafe');
+    // Telegram WebApp 的 initData 原始值是查询字符串："user=...&auth_date=...&hash=...&..."
+    const parsed = parseInitDataQueryString(raw);
+    return parsed;
+  } catch (e) {
+    console.warn('通过 SDK 获取 initData 失败：', e);
     return null;
   }
-
-  const formatted: TelegramInitData = {
-    user: data.user ? {
-      id: data.user.id,
-      first_name: data.user.first_name,
-      username: data.user.username,
-    } as TelegramUser : undefined,
-    auth_date: data.auth_date,
-    hash: data.hash,
-  };
-
-  if (data.start_param) {
-    formatted.start_param = data.start_param;
-  }
-
-  if (data.chat) {
-    formatted.chat = data.chat as TelegramChat;
-  }
-
-  return formatted;
 }
 
 /**
@@ -74,50 +61,104 @@ export function getTelegramUser(): TelegramUser | null {
  */
 export function isTelegramEnvironment(): boolean {
   if (typeof window === 'undefined') return false;
-  return !!window.Telegram?.WebApp;
+  try {
+    // 若能正常检索到 Launch Params，则视为在 Telegram 环境
+    retrieveLaunchParams();
+    return true;
+  } catch {
+    return !!window.Telegram?.WebApp;
+  }
 }
 
 /**
- * 格式化 initData 数据为查询字符串格式
- * @returns {string} 格式如: "user=%7B%22id%22%3A123456%7D&auth_date=1234567890&hash=abc123"
- * @example
- * const formattedData = formatInitDataToQueryString();
+ * 返回以查询字符串形式表示的 initData（仅包含 user、auth_date、hash）
+ * @returns {string} 例如: "user=%7B%22id%22%3A123456%7D&auth_date=1234567890&hash=abc123"
  */
 export function getFormattedInitData(): { initData: string } | null {
-  const formattedData = formatInitDataToQueryString();
-  if (!formattedData) return null;
-  
-  return {
-    initData: formattedData
-  };
+  if (typeof window === 'undefined') return null;
+  if (!isTelegramEnvironment()) return null;
+  try {
+    const raw = retrieveRawInitData();
+    if (!raw || typeof raw !== 'string') return null;
+    // 直接返回 SDK 的原始 initData（完整查询字符串，包含 signature、chat_instance 等）
+    return { initData: raw };
+  } catch (e) {
+    console.warn('读取原始 initData 失败：', e);
+    return null;
+  }
 }
 
 /**
- * 格式化 initData 数据为查询字符串格式（内部使用）
- * @returns {string} 格式如: "user=%7B%22id%22%3A123456%7D&auth_date=1234567890&hash=abc123"
+ * 将 SDK 获取的 initData 转为查询字符串（内部使用）
  */
 export function formatInitDataToQueryString(): string | null {
+  // 仍然支持将解析后的数据转为最小查询串，但不用于登录
   const initData = getInitData();
   if (!initData) return null;
 
   const params = new URLSearchParams();
 
-  // 处理 user 数据
   if (initData.user) {
     const userStr = JSON.stringify({
       id: initData.user.id,
       first_name: initData.user.first_name,
-      ...(initData.user.username ? { username: initData.user.username } : {})
+      ...(initData.user.username ? { username: initData.user.username } : {}),
     });
     params.append('user', userStr);
   }
 
-  // 添加 auth_date
   params.append('auth_date', initData.auth_date.toString());
-
-  // 添加 hash
   params.append('hash', initData.hash);
+
+  if (initData.chat_type) params.append('chat_type', initData.chat_type);
+  if (initData.chat_instance) params.append('chat_instance', initData.chat_instance);
+  if (initData.start_param) params.append('start_param', initData.start_param);
 
   return params.toString();
 }
 
+function parseInitDataQueryString(raw: string): TelegramInitData {
+  const qs = raw.startsWith('?') ? raw.slice(1) : raw;
+  const params = new URLSearchParams(qs);
+
+  const userParam = params.get('user');
+  let user: TelegramUser | undefined;
+  if (userParam) {
+    try {
+      // URLSearchParams.get 已经对 %xx 解码，得到 JSON 字符串
+      const u = JSON.parse(userParam) as Partial<TelegramUser>;
+      user = {
+        id: Number(u.id),
+        first_name: String(u.first_name ?? ''),
+        last_name: u.last_name,
+        username: u.username,
+        language_code: u.language_code,
+        allows_write_to_pm: u.allows_write_to_pm,
+        photo_url: u.photo_url,
+        is_premium: u.is_premium,
+      };
+    } catch (e) {
+      console.warn('解析 user 字段失败（忽略该字段）：', e);
+    }
+  }
+
+  const chat_type = params.get('chat_type') ?? undefined;
+  const chat_instance = params.get('chat_instance') ?? undefined;
+  const start_param = params.get('start_param') ?? undefined;
+
+  const auth_dateStr = params.get('auth_date');
+  const hash = params.get('hash') ?? '';
+
+  const auth_date = auth_dateStr ? Number(auth_dateStr) : Date.now();
+
+  const result: TelegramInitData = {
+    user,
+    chat_type,
+    chat_instance,
+    start_param,
+    auth_date,
+    hash,
+  };
+
+  return result;
+}

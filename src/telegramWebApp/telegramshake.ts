@@ -1,34 +1,20 @@
-// 定义 Telegram WebApp 类型
-interface TelegramWebApp {
-  HapticFeedback: {
-    impactOccurred: (style: 'light' | 'medium' | 'heavy') => void
-    notificationOccurred: (type: 'success' | 'error' | 'warning') => void
-  }
-}
-// 声明 Telegram WebApp 全局变量
-declare const Telegram: {
-  WebApp: {
-    HapticFeedback: {
-      impactOccurred: (style: 'light' | 'medium' | 'heavy') => void
-      notificationOccurred: (type: 'success' | 'error' | 'warning') => void
-    }
-  }
-}
+// Telegram WebApp 类型补充文档
+// 注意：@telegram-apps/sdk-react 已经定义了完整的 Window.Telegram 类型
+// 这里只提供示例代码和说明
 
-interface Window {
-  Telegram?: {
-    WebApp: TelegramWebApp
-  }
-}
-// 方式一
+// 方式一示例（需要类型检查）
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function vibrateLight() {
-  window.Telegram.WebApp.HapticFeedback.impactOccurred('light')
+  if (window.Telegram?.WebApp) {
+    window.Telegram.WebApp.HapticFeedback?.impactOccurred('light')
+  }
 }
 
-// 方式二
+// 方式二示例（推荐，更安全）
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function vibrateLights() {
   if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
-    window.Telegram.WebApp.HapticFeedback.impactOccurred('light')
+    window.Telegram.WebApp.HapticFeedback?.impactOccurred('light')
   } else {
     console.warn('震动触发：轻微')
   }
@@ -45,18 +31,18 @@ function vibrateLights() {
 {
   /**其他解决
    * 1、声明全局Telegram变量
-   * 
+   *
    *   declare const Telegram: {
    * WebApp: {
    * HapticFeedback: {
    * impactOccurred: (style: 'light' | 'medium' | 'heavy') => void;
    *  notificationOccurred: (type: 'success' | 'error' | 'warning') => void;
-   *    }; 
+   *    };
    *   };
    * };
-    * 2、使用 TypeScript 的非空断言操作符
-    * function vibrateLight() {
-    *  window.Telegram!.WebApp.HapticFeedback.impactOccurred('light');
-    * }
-    */
+   * 2、使用 TypeScript 的非空断言操作符
+   * function vibrateLight() {
+   *  window.Telegram!.WebApp.HapticFeedback.impactOccurred('light');
+   * }
+   */
 }
