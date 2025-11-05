@@ -1,6 +1,7 @@
 'use client'
 
 import { usePathname, useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { motion } from 'framer-motion'
 
 
@@ -72,9 +73,10 @@ export default function BottomNavigation() {
           const isActive = pathname === item.path || (item.path === '/base' && pathname === '/')
           
           return (
-            <motion.button
+            <Link
               key={item.id}
-              onClick={() => handleNavigation(item.path)}
+              href={item.path}
+              prefetch={false}
               className={`relative flex items-center justify-center transition-all duration-300 ${
                 item.isCenter 
                   ? 'w-[49px] h-[49px] rounded-full -translate-y-5' 
@@ -83,9 +85,12 @@ export default function BottomNavigation() {
               style={item.isCenter ? {
                 background: 'linear-gradient(275.69deg, #182253 3.41%, #2B1753 99.3%)'
               } : {}}
-              whileTap={{ scale: 0.95 }}
-              transition={{ duration: 0.1 }}
             >
+              <motion.div
+                className="absolute inset-0"
+                whileTap={{ scale: 0.95 }}
+                transition={{ duration: 0.1 }}
+              />
               {/* 图标容器 */}
               <div className={`relative flex items-center justify-center ${
                 item.isCenter ? 'w-10 h-10' : 'w-10 h-10'
@@ -172,7 +177,7 @@ export default function BottomNavigation() {
                   />
                 </>
               )}
-            </motion.button>
+            </Link>
           )
         })}
       </div>
