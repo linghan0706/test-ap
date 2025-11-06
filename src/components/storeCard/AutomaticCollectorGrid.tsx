@@ -1,6 +1,7 @@
 'use client'
 
 import { PropCard } from './PropCard'
+import { emitPurchase } from '@/lib/purchaseBus'
 {
   /**
    * 商店接口
@@ -22,6 +23,7 @@ interface AutomaticCollectorGridProps {
   items?: GridItem[]
   loading?: boolean
   emptyMessage?: string
+  onPurchase?: (payload: { id?: string; icon?: string; title?: string }) => void
 }
 
 export default function AutomaticCollectorGrid({
@@ -30,29 +32,30 @@ export default function AutomaticCollectorGrid({
       title: 'Primary',
       validity_period: 3,
       ceiling: 50,
-      icon: '/automaticcollector/primary.png',
+      icon: '/stores/AutomaticCollector/primary.svg',
     },
     {
       title: 'Intermediate',
       validity_period: 3,
       ceiling: 50,
-      icon: '/automaticcollector/intermediate.png',
+      icon: '/stores/AutomaticCollector/intermediate.svg',
     },
     {
       title: 'Advanced',
       validity_period: 3,
       ceiling: 50,
-      icon: '/automaticcollector/advanced.png',
+      icon: '/stores/AutomaticCollector/advanced.svg',
     },
     {
       title: 'Super',
       validity_period: 3,
       ceiling: 50,
-      icon: '/automaticcollector/super.png',
+      icon: '/stores/AutomaticCollector/super.svg',
     },
   ],
   loading = false,
   emptyMessage = 'No collectors available',
+  onPurchase,
 }: AutomaticCollectorGridProps) {
   return (
     <div
@@ -84,6 +87,11 @@ export default function AutomaticCollectorGrid({
             validity={`Validity: ${item.validity_period ?? 3} Days`}
             dailyCap={`Daily Energy Cap +${item.ceiling ?? 50}%`}
             icon={item.icon}
+            onPurchase={(payload) => {
+              const p = payload ?? { id: item.title, icon: item.icon, title: item.title }
+              if (onPurchase) onPurchase(p)
+              else emitPurchase(p)
+            }}
           />
         ))}
     </div>

@@ -1,17 +1,29 @@
 'use client'
 
-import { motion } from 'framer-motion'
-import { useSearchParams } from 'next/navigation'
+import { motion, AnimatePresence } from 'framer-motion'
+import { useSearchParams, useRouter } from 'next/navigation'
+import dynamic from 'next/dynamic'
 import backImage from '@/public/backImage.png'
-import storeImage from '@/public/storeImage.png'
 import AssetRedemption from '@/components/storeCard/AssetRedemption'
 import StoreTabs from '@/components/storeCard/StoreTabs'
 import RaffleTicketGrid from '@/components/storeCard/RaffleTicketGrid'
 import AutomaticCollectorGrid from '@/components/storeCard/AutomaticCollectorGrid'
+import { useTransactionModalStore } from '@/stores/transactionModalStore'
+import { ErrorBoundary } from '@/components/ui/ErrorBoundary'
+
+const StoresTransactionCardLazy = dynamic(() => import('@/components/stores_up/StoresTransactionCard'), {
+  ssr: false,
+})
 
 export default function StorePage() {
   const search = useSearchParams()
+  const router = useRouter()
   const tab = (search.get('tab') as 'raffle' | 'collector') || 'raffle'
+  const { isOpen, payload, openModal, closeModal } = useTransactionModalStore()
+
+  const handlePurchase = (payload: { id?: string; icon?: string; title?: string }) => {
+    openModal(payload)
+  }
 
   return (
     <div className="min-h-screen relative overflow-hidden pb-20 pt-10 sm:pt-14 mt-[20px]">
@@ -73,10 +85,45 @@ export default function StorePage() {
 
 
           <div className="mt-4 sm:mt-6">
-            {tab === 'raffle' ? <RaffleTicketGrid /> : <AutomaticCollectorGrid />}
+            {tab === 'raffle' ? (
+              <RaffleTicketGrid onPurchase={handlePurchase} />
+            ) : (
+              <AutomaticCollectorGrid onPurchase={handlePurchase} />
+            )}
           </div>
         </div>
       </div>
+      {/* 动态加载的交易卡片模态层 */}
+      <AnimatePresence>
+        {isOpen && (
+          <>
+            <motion.div
+              key="modal-overlay"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.18 }}
+              className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm"
+              onClick={closeModal}
+            />
+            <motion.div
+              key="modal-content"
+              initial={{ opacity: 0, scale: 0.98, y: 12 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.98, y: -12 }}
+              transition={{ duration: 0.2 }}
+              className="fixed inset-0 z-50 flex items-center justify-center p-4"
+            >
+              <ErrorBoundary onReset={closeModal}>
+                <StoresTransactionCardLazy
+                  initialIconSrc={payload?.icon}
+                  onClose={closeModal}
+                />
+              </ErrorBoundary>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </div>
   )
 }

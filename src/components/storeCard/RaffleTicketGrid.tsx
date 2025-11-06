@@ -1,23 +1,23 @@
 'use client'
 
 import { PropCard } from './PropCard'
+import { emitPurchase } from '@/lib/purchaseBus'
 
 interface GridItem { title: string; validity_period?: number; ceiling?: number; icon?: string }
 interface RaffleTicketGridProps {
   items?: GridItem[]
   loading?: boolean
   emptyMessage?: string
+  onPurchase?: (payload: { id?: string; icon?: string; title?: string }) => void
 }
 
 export default function RaffleTicketGrid({
   items = [
-    { title: 'Primary', validity_period: 3, ceiling: 50, icon: '/automaticcollector/primary.png' },
-    { title: 'Intermediate', validity_period: 3, ceiling: 50, icon: '/automaticcollector/intermediate.png' },
-    { title: 'Advanced', validity_period: 3, ceiling: 50, icon: '/automaticcollector/advanced.png' },
-    { title: 'Super', validity_period: 3, ceiling: 50, icon: '/automaticcollector/super.png' },
+    { title: 'Raffle Ticket', validity_period: 3, ceiling: 50, icon: '/stores/RaffleTicket/raffleticket.svg' },
   ],
   loading = false,
-  emptyMessage = 'No tickets available'
+  emptyMessage = 'No tickets available',
+  onPurchase,
 }: RaffleTicketGridProps) {
   return (
     <div
@@ -49,6 +49,11 @@ export default function RaffleTicketGrid({
             validity={`Validity: ${item.validity_period ?? 3} Days`}
             dailyCap={`Daily Energy Cap +${item.ceiling ?? 50}%`}
             icon={item.icon}
+            onPurchase={(payload) => {
+              const p = payload ?? { id: item.title, icon: item.icon, title: item.title }
+              if (onPurchase) onPurchase(p)
+              else emitPurchase(p)
+            }}
           />
         ))
       )}

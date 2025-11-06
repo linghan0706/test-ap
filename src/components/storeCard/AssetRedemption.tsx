@@ -15,7 +15,7 @@ export default function AssetRedemption() {
            {/* Powers */}
           <div className="flex items-center gap-[10px] border py-[8px] px-[12px] border-rounded-[8px] bg-[#4A3A44] border-[#7C5F30] rounded-lg">
             <span className="text-lg">
-              <Image src="/gamecoins/powers.png" alt="powers" width={16} height={16} />
+              <Image src="/currency/power.svg" alt="powers" width={16} height={16} />
             </span>
             <span className="font-exo2 text-[18px]  leading-[22px] text-white">100</span>
           </div>
@@ -23,7 +23,7 @@ export default function AssetRedemption() {
           <div className="flex items-center gap-[10px] border py-[8px] px-[12px] border-rounded-[8px] bg-[#4A3A44] border-[#7C5F30] rounded-lg">
            {/* Stars */}
             <span className="text-yellow-300 text-lg">
-              <Image src="/gamecoins/stars.png" alt="nova" width={16} height={16} />
+              <Image src="/currency/stars.svg" alt="nova" width={16} height={16} />
               </span>
             <span className="font-exo2 text-[18px]  leading-[22px] text-white">1</span>
           </div>

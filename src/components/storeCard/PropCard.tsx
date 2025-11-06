@@ -8,7 +8,7 @@ interface PropCardProps {
   validity?: string
   dailyCap?: string
   icon?: string
-  onPurchase?: () => void
+  onPurchase?: (payload?: { id?: string; icon?: string; title?: string }) => void
 }
 
 export function PropCard({ title, validity = 'Validity: 3 Days', dailyCap = 'Daily Energy Cap +50%', icon, onPurchase }: PropCardProps) {
@@ -46,7 +46,7 @@ export function PropCard({ title, validity = 'Validity: 3 Days', dailyCap = 'Dai
 
         <button
           className="mt-2 w-[144px] h-[34px] rounded-[8px] bg-[linear-gradient(0deg,#221A4C,#221A4C),linear-gradient(156.71deg,#6B0AE9_2.78%,#6410B1_99.22%)]  text-white font-jersey-25 text-[16px] transition-all shadow-lg"
-          onClick={onPurchase}
+          onClick={() => onPurchase?.({ id: title, icon, title })}
         >
           purchase
         </button>
