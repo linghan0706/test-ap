@@ -1,0 +1,128 @@
+
+"use client"
+
+import Image from "next/image"
+
+type TaskupType = "Continue" | "Retry" | "" | undefined
+
+{/*
+  * 任务进度json
+{
+  id: number          //任务进度id，id：1完成，id：2：失败，id：3：任务进行扫描中
+  title: string       //标题              
+  description?: string//进度描述  可以为空  id：1没有任务描述
+  image: string       //任务进度图标
+  Reward: number      //奖励数据，可以为空  仅id：1完成有奖励
+  RewardIcon?: string //奖励图标  可以为空  仅id：完成有奖励图标
+  type?: TaskupType   //任务情况  可以为空  类型 "Continue" | "Retry" | undefined
+} 
+*/}
+
+
+interface TaskupItem {
+  id: number
+  title: string
+  description?: string
+  image: string
+  Reward: number
+  RewardIcon?: string
+  type?: TaskupType
+}
+
+interface TaskupCardProps {
+  items?: TaskupItem[]
+  loading?: boolean
+  activeId?: number
+}
+
+const defaultItems: TaskupItem[] = [
+  {
+    id: 1,
+    title: "task Complete!",
+    description: "",
+    image: "/Popup/taskComplete.svg",
+    Reward: 100,
+    RewardIcon: "/gamecoins/powers.png",
+    type: "Continue",
+  },
+  {
+    id: 2,
+    title: "task Failed!!!",
+    description: "Task failed. Please try again.",
+    image: "/Popup/taskFailed.svg",
+    Reward: 0,
+    RewardIcon: "/gamecoins/powers.png",
+    type: "Retry",
+  },
+  {
+    id: 3,
+    title: "Task Scanning...",
+    description: "Analyzing task data, please wait...",
+    image: "/Popup/taskScanning.svg",
+    Reward: 0,
+    RewardIcon: "/gamecoins/powers.png",
+    type: "",
+  },
+]
+
+export default function TaskupCard({ items = defaultItems, loading = false, activeId }: TaskupCardProps) {
+  const activeItem = items.find((i) => i.id === activeId) ?? items[0]
+  return (
+    <div
+      className="flex flex-col items-center justify-center gap-2 p-4"
+      role="list"
+      aria-busy={loading}
+    >
+      {loading && (
+        <div
+          className="mb-2 w-[317px] h-[300px] rounded-[12px] border border-white/10 bg-white/10 animate-pulse shadow-[0_8px_32px_rgba(0,0,0,0.25)]"
+          aria-hidden
+        />
+      )}
+
+      {!loading && (
+        <div
+          key={activeItem.id}
+          className="mb-2 w-[317px] h-[300px] rounded-[12px] overflow-hidden bg-[url('/Popup/taskupback.svg')] bg-cover bg-center bg-[#0F172B] border border-white/10 flex flex-col justify-center items-center gap-2 text-white"
+          role="listitem"
+        >
+          <Image
+            src={activeItem.image}
+            alt={activeItem.title}
+            width={140}
+            height={140}
+            className="w-[140px] h-[140px]"
+          />
+          <p className="mt-1 font-roboto font-medium text-[16px] leading-[22px] text-center text-white">{activeItem.title}</p>
+          {activeItem.id !== 1 && activeItem.description && (
+            <p className="font-roboto font-normal text-[14px] leading-[22px] text-center text-[#E4E4E4]">{activeItem.description}</p>
+          )}
+
+          {activeItem.Reward > 0 && (
+            <div className="mt-1 flex items-center gap-2">
+              <span className="font-roboto font-normal text-[14px] leading-[22px] text-center text-[#E4E4E4]">Reward:</span>
+              {activeItem.RewardIcon && (
+                <Image src={activeItem.RewardIcon} alt="reward" width={20} height={20} className="w-[20px] h-[20px]" />
+              )}
+              <span className="font-roboto font-normal text-[14px] leading-[22px] text-center text-[#E4E4E4]">+{activeItem.Reward}</span>
+            </div>
+          )}
+
+          {activeItem.id !== 3 && activeItem.type && activeItem.type !== "" && (
+            <button
+              className={`mt-2 w-[141px] h-[30px] px-[10px] py-[4px] rounded-[8px] flex flex-row items-center justify-center gap-1 text-white font-roboto font-medium text-[14px] leading-[22px] ${
+                activeItem.id === 1
+                  ? "bg-[linear-gradient(156.71deg,#84D947_2.78%,#39A740_99.22%)]"
+                  : activeItem.id === 2
+                  ? "bg-[linear-gradient(156.71deg,#F43F4E_2.78%,#DF253C_99.22%)]"
+                  : "bg-white/20"
+              }`}
+            >
+              {activeItem.type}
+            </button>
+          )}
+        </div>
+      )}
+    </div>
+  )
+}

@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap');
+
 /* Jersey 字体类 */
 .font-jersey-10 {
   font-family: var(--font-jersey-10), sans-serif;
@@ -9,6 +11,11 @@
 
 .font-exo2 {
   font-family: 'Exo 2', sans-serif;  
+}
+
+/* Roboto 字体类 */
+.font-roboto {
+  font-family: 'Roboto', sans-serif;
 }
 .test{
   /* UNI Heart NFT */
