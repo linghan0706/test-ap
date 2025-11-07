@@ -142,7 +142,7 @@ export default function TaskPage() {
           className="absolute inset-0"
           style={{ 
             background: 'radial-gradient(ellipse at center, rgba(107,10,233,0.4) 0%, rgba(100,16,177,0.2) 40%, rgba(94,50,172,0.1) 80%)',
-            backdropFilter: 'blur(15px)',
+            backdropFilter: 'blur(5px)',
             WebkitBackdropFilter: 'blur(15px)'
           }}
         ></div>

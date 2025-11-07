@@ -5,8 +5,9 @@ import Image from 'next/image'
 
 export default function AssetRedemption() {
   return (
-    <div className="w-full max-w-[380px] sm:max-w-[400px] mx-auto ">
-      <div className="flex-col  rounded-[12px] border py-5 px-3  shadow-lg bg-[#221A4C]">
+    <div className="w-full flex items-center justify-center">
+         <div className=" w-[361px]">
+      <div className="flex-col  rounded-[12px] border py-5 px-3  shadow-lg bg-[#221A4C] border-[1px] border-[#6B0AE9]">
         <div className="mx-auto text-center text-white font-jersey-10 text-[22px] sm:text-[20px] mb-3 w-[136px] height-[22px]">
           asset redemption
         </div>
@@ -38,5 +39,7 @@ export default function AssetRedemption() {
         </motion.button>
       </div>
     </div>
+    </div>
+
   )
 }

@@ -76,12 +76,12 @@ export default function StoresTransactionCard({
 
       {/* 数量选择器 */}
       <div className="flex items-center gap-3 mt-1">
-        <button onClick={handleDec} aria-label="Decrease" className="w-7 h-7 rounded-md bg-[#4b2bbd] border border-white/15 relative">
-          <span className="absolute inset-0 flex items-center justify-center text-white">◀</span>
+        <button onClick={handleDec} aria-label="Decrease" className="w-7 h-7 flex items-center justify-center bg-transparent">
+          <Image src="/currency/leftButton.svg" alt="Decrease" width={14} height={14} />
         </button>
         <span className="font-roboto font-bold text-[18px]">{quantity}</span>
-        <button onClick={handleInc} aria-label="Increase" className="w-7 h-7 rounded-md bg-[#4b2bbd] border border-white/15 relative">
-          <span className="absolute inset-0 flex items-center justify-center text-white">▶</span>
+        <button onClick={handleInc} aria-label="Increase" className="w-7 h-7 flex items-center justify-center bg-transparent">
+          <Image src="/currency/rightButton.svg" alt="Increase" width={14} height={14} />
         </button>
       </div>
 

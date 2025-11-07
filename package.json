@@ -16,6 +16,8 @@
   },
   "dependencies": {
     "@ant-design/nextjs-registry": "^1.1.0",
+    "@emotion/react": "11.14.0",
+    "@emotion/styled": "11.14.1",
     "@headlessui/react": "^2.2.9",
     "@heroicons/react": "^2.2.0",
     "@telegram-apps/sdk-react": "^3.3.9",

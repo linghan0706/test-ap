@@ -88,3 +88,20 @@ body {
   @apply transition-all duration-200;
 }
 
+/* Scoped spacing for PropCard text group
+ * Reason: Adjust inner margins/padding without moving the parent frame
+ * Impact: Only affects `.propcard-text` and its direct children
+ * Parent Stability: Parent keeps fixed size; sibling positions unchanged
+ */
+.propcard-text {
+  padding-top: 4px;
+  padding-bottom: 2px;
+}
+.propcard-text .prop-title {
+  margin: 0 0 2px 0;
+}
+.propcard-text .prop-validity {
+  margin: 0 0 2px 0;
+}
+/* Remove margin override to allow component-level mt-* spacing */
+

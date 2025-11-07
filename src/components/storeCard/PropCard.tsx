@@ -17,7 +17,7 @@ export function PropCard({ title, validity = 'Validity: 3 Days', dailyCap = 'Dai
       initial={{ opacity: 0, y: 14 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="relative w-[160px] h-[208px] rounded-[12px]"
+      className="relative w-[158px] h-[208px] rounded-[12px]"
     >
       <div
         className="absolute inset-0 rounded-[12px]"
@@ -29,7 +29,7 @@ export function PropCard({ title, validity = 'Validity: 3 Days', dailyCap = 'Dai
 
       <div className="relative z-10 flex flex-col items-center justify-between h-full p-3 w-full">
       <div className='w-[144px] h-[154px] flex flex-col items-center rounded-[12px]  bg-[linear-gradient(0deg,#221A4C,#221A4C),linear-gradient(156.71deg,#6B0AE9_2.78%,#6410B1_99.22%)]'>
-          <div className="w-16 h-16  flex items-center justify-center text-2xl overflow-hidden">
+          <div className="w-16 h-17  flex items-center justify-center text-2xl overflow-hidden pt-3.5">
           {icon ? (
             <Image src={icon} alt={title} width={64} height={64} />
           ) : (
@@ -37,10 +37,11 @@ export function PropCard({ title, validity = 'Validity: 3 Days', dailyCap = 'Dai
           )}
         </div>
 
-        <div className="text-center">
-          <div className="text-white font-jersey-10 text-[20px]">{title}</div>
-          <div className="text-[#B2B2B2] font-exo2 text-[10px]  mt-1">{validity}</div>
-          <div className="text-[#B2B2B2] font-exo2 text-[10px]">{dailyCap}</div>
+     
+        <div className="text-center propcard-text">
+          <div className="prop-title text-white font-jersey-10 text-[20px]  ">{title}</div>
+          <div className="prop-validity text-[#B2B2B2] font-exo2 text-[10px] leading-[14px]">{validity}</div>
+          <div className="prop-cap mt-2 text-[#B2B2B2] font-exo2 text-[10px] leading-[14px]">{dailyCap}</div>
         </div>
       </div>
 
