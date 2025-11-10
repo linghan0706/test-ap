@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b6a7b452-41b4-41af-abda-5923943511b2" name="更改" comment="">
-      <change beforePath="$PROJECT_DIR$/src/components/ui/InitialLoading.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/InitialLoading.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/styles/test.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/styles/test.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ui/Loading.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/Loading.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -13,9 +14,9 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 3
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 3
+}</component>
   <component name="ProjectId" id="34fz2hjxdnyrhfsrpPwbJXuefBk" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -26,20 +27,18 @@
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "branch-lin",
+    "git-widget-placeholder": "feat-lin",
     "js.debugger.nextJs.config.created.client": "true",
     "js.debugger.nextJs.config.created.server": "true",
     "junie.onboarding.icon.badge.shown": "true",
+    "kotlin-language-version-configured": "true",
     "last_opened_file_path": "E:/After_end/ssm",
     "nodejs_package_manager_path": "yarn",
     "to.speed.mode.migration.done": "true",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RunManager" selected="npm.Next.js: 服务器端">
-    <configuration name="Next.js: 调试客户端" type="JavascriptDebugType" uri="http://localhost:3000/">
-      <method v="2" />
-    </configuration>
+  <component name="RunManager">
     <configuration name="Next.js: 服务器端" type="js.build_tools.npm">
       <package-json value="$PROJECT_DIR$/package.json" />
       <command value="run" />
@@ -67,7 +66,11 @@
       <option name="presentableId" value="Default" />
       <updated>1761619210180</updated>
       <workItem from="1761619212025" duration="7000" />
+      <workItem from="1762227776611" duration="198000" />
     </task>
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
 </project>

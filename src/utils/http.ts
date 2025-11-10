@@ -1,9 +1,22 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, AxiosError, InternalAxiosRequestConfig } from 'axios'
 
+// 计算基础地址：优先使用环境变量，浏览器端默认同源以避免混合内容
+function resolveBaseURL(): string {
+  const envBase = (typeof process !== 'undefined' ? process.env?.NEXT_PUBLIC_API_BASE : undefined) || ''
+  // 浏览器端：默认同源（空 baseURL），以避免在 HTTPS 页面发起 HTTP 请求导致 Mixed Content
+  if (typeof window !== 'undefined') {
+    return envBase.trim() || ''
+  }
+  
+  // 服务端：允许使用服务端环境变量指定上游地址
+  const serverBase = (typeof process !== 'undefined' ? (process.env?.API_BASE_URL || process.env?.NEXT_PUBLIC_API_BASE) : undefined) || ''
+  return (serverBase || envBase).trim()
+}
+
 // 创建 axios 实例（统一后端基础地址配置）
 const http: AxiosInstance = axios.create({
-  // 统一设置后端基础地址
-  baseURL: 'http://xb8692a8.natappfree.cc',
+  // 统一设置后端基础地址（同源优先，避免 Mixed Content）
+  baseURL: resolveBaseURL(),
   timeout: 10000, // 10秒超时
   headers: {
     'Content-Type': 'application/json',

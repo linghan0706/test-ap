@@ -1,75 +1,48 @@
-'use client'
+"use client"
 
 import React from 'react'
-import { Result, Button } from 'antd'
-import { ExceptionOutlined } from '@ant-design/icons'
 
-interface ErrorBoundaryState {
+type Props = {
+  fallback?: React.ReactNode
+  onReset?: () => void
+  children?: React.ReactNode
+}
+
+type State = {
   hasError: boolean
-  error?: Error
+  error?: unknown
 }
 
-interface ErrorBoundaryProps {
-  children: React.ReactNode
-  fallback?: React.ComponentType<{ error?: Error; resetError: () => void }>
-  onError?: (error: Error, errorInfo: React.ErrorInfo) => void
-}
-
-export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
-  constructor(props: ErrorBoundaryProps) {
+export class ErrorBoundary extends React.Component<Props, State> {
+  constructor(props: Props) {
     super(props)
     this.state = { hasError: false }
   }
 
-  static getDerivedStateFromError(error: Error): ErrorBoundaryState {
+  static getDerivedStateFromError(error: unknown): State {
     return { hasError: true, error }
   }
 
-  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    console.error('ErrorBoundary caught an error:', error, errorInfo)
-    this.props.onError?.(error, errorInfo)
-  }
-
-  resetError = () => {
-    this.setState({ hasError: false, error: undefined })
+  componentDidCatch(error: unknown, info: unknown) {
+    console.error('[ErrorBoundary] caught error in modal', { error, info })
   }
 
   render() {
     if (this.state.hasError) {
-      if (this.props.fallback) {
-        const FallbackComponent = this.props.fallback
-        return <FallbackComponent error={this.state.error} resetError={this.resetError} />
-      }
-
       return (
-        <div className="min-h-[400px] flex items-center justify-center">
-          <Result
-            status="error"
-            icon={<ExceptionOutlined />}
-            title="出现了一些问题"
-            subTitle={
-              this.state.error?.message || '应用程序遇到了意外错误，请刷新页面重试。'
-            }
-            extra={[
-              <Button type="primary" key="retry" onClick={this.resetError}>
-                重试
-              </Button>,
-              <Button key="refresh" onClick={() => window.location.reload()}>
-                刷新页面
-              </Button>,
-            ]}
-          />
-        </div>
+        this.props.fallback ?? (
+          <div className="rounded-md bg-black/60 text-white p-4">
+            <p className="text-sm">加载失败：组件未能正常渲染。</p>
+            <button
+              className="mt-2 px-3 py-1 rounded bg-white/20 hover:bg-white/30"
+              onClick={this.props.onReset}
+            >
+              关闭
+            </button>
+          </div>
+        )
       )
     }
-
-    return this.props.children
-  }
-}
-
-// Hook版本的错误边界
-export function useErrorHandler() {
-  return (error: Error, errorInfo?: React.ErrorInfo) => {
-    console.error('Error caught by error handler:', error, errorInfo)
+    return this.props.children as React.ReactNode
   }
 }

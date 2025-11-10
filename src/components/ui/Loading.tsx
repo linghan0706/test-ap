@@ -173,6 +173,11 @@ const guidancePages: GuidancePageData[] = [
     }
   },
 ]
+{/**
+  *加载获取用户数据
+  *
+  *
+  */}
 
 // 样式映射函数
 const getStyleForElement = (pageData: GuidancePageData, elementType: 'mainTitle' | 'subTitle') => {

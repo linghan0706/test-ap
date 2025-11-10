@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import { useState } from 'react'
 
 import backImage from '@/public/backImage.png'
+import Image from 'next/image'
 
 /**
  * task接口json格式
@@ -43,24 +44,24 @@ export default function TaskPage() {
       title: 'Daily Check-in',
       reward: 1000,
       status: 'completed',
-      taskicon: '🎉',
-      badgeicon: '🎖️'
+      taskicon: '/task/taskicon/daily.svg',
+      badgeicon: '/task/badgeicon/powers.svg'
     },
     {
       id: 2,
       title: 'Follow X',
       reward: 1000,
       status: 'pending',
-      taskicon: '🎉',
-      badgeicon: '🎖️'
+      taskicon: '/task/taskicon/x.svg',
+      badgeicon: '/task/badgeicon/diamond.svg'
     },
     {
       id: 3,
       title: 'Follow the Channel',
       reward: 1000,
       status: 'completed',
-      taskicon: '🎉',
-      badgeicon: '🎖️'
+      taskicon: '/task/taskicon/telegram.svg',
+      badgeicon: '/task/badgeicon/diamond.svg'
     },
     {
       id: 4,
@@ -71,8 +72,8 @@ export default function TaskPage() {
         current: 2,
         total: 5
       },
-      taskicon: '🎉',
-      badgeicon: '🎖️'
+      taskicon: '/task/taskicon/invite5.svg',
+      badgeicon: '/task/badgeicon/crown.svg'
     },
     {
       id: 5,
@@ -83,8 +84,8 @@ export default function TaskPage() {
         current: 9,
         total: 10
       },
-      taskicon: '🎉',
-      badgeicon: '🎖️'
+      taskicon: '/task/taskicon/invite10.svg',
+      badgeicon: '/task/badgeicon/crown.svg'
     },
     {
       id: 6,
@@ -95,8 +96,8 @@ export default function TaskPage() {
         current: 40,
         total: 50
       },
-      taskicon: '🎉',
-      badgeicon: '🎖️'
+      taskicon: '/task/taskicon/invite50.svg',
+      badgeicon: '/task/badgeicon/highest.svg'
     },
     {
       id: 7,
@@ -107,8 +108,8 @@ export default function TaskPage() {
         current: 99,
         total: 100
       },
-      taskicon: '🎉',
-      badgeicon: '🎖️'
+      taskicon: '/task/taskicon/invite100.svg',
+      badgeicon: '/task/badgeicon/highest.svg'
     }
   ])
 
@@ -141,7 +142,7 @@ export default function TaskPage() {
           className="absolute inset-0"
           style={{ 
             background: 'radial-gradient(ellipse at center, rgba(107,10,233,0.4) 0%, rgba(100,16,177,0.2) 40%, rgba(94,50,172,0.1) 80%)',
-            backdropFilter: 'blur(15px)',
+            backdropFilter: 'blur(5px)',
             WebkitBackdropFilter: 'blur(15px)'
           }}
         ></div>
@@ -149,10 +150,10 @@ export default function TaskPage() {
       
       {/* 头部标题区域*/}
       <div className="flex flex-col items-center pt-12 sm:pt-16 space-y-3 sm:space-y-4 relative z-10 px-4">
-        <h1 className="font-jersey-25 text-[32px] sm:text-[40px] leading-[40px] sm:leading-[48px] text-white font-normal tracking-wide text-center">
+        <h1 className="font-jersey-10 text-[36px] sm:text-[40px] leading-[22px] sm:leading-[48px] text-white font-normal tracking-wide text-center">
           Task Center
         </h1>
-        <p className="font-jersey-25 text-[16px] sm:text-[18px] leading-[20px] sm:leading-[24px] text-center text-[#B2B2B2] font-normal max-w-[280px] sm:max-w-[300px]">
+        <p className="font-exo2 text-[16px] sm:text-[18px] leading-[22px] sm:leading-[24px] text-center text-[#B2B2B2] font-normal max-w-[280px] sm:max-w-[300px]">
           Complete tasks to get rewards
         </p>
       </div>
@@ -187,33 +188,53 @@ export default function TaskPage() {
               {/* 左侧图标和文本区域 */}
               <div className="flex items-center flex-1 min-w-0">
                 {/* 图标容器  */}
-                <div className="w-[44px] h-[44px] sm:w-[52px] sm:h-[52px] flex items-center justify-center relative flex-shrink-0">
+                <div className="w-[48px] h-[48px] sm:w-[48px] sm:h-[48px] flex items-center justify-center relative flex-shrink-0">
                   {/* 图标背景圆圈 */}
                   <div 
                     className="absolute inset-0 rounded-full"
                     style={{
-                      background: 'linear-gradient(135deg, rgba(107,10,233,0.3) 0%, rgba(100,16,177,0.3) 100%)',
-                      border: '1px solid rgba(255,255,255,0.1)'
+                      background: 'linear-gradient(135deg, rgba(107,10,233,0.3) 0%, rgba(100,16,177,0.3) 100%)'
                     }}
                   />
                   {/* 主任务图标 */}
-                  <span className="text-[24px] sm:text-[28px] relative z-10">{task.taskicon}</span>
+                {typeof task.taskicon === 'string' && /\.(png|jpg|jpeg|svg|gif)$/i.test(task.taskicon)
+                  ? (
+                    <Image
+                      src={task.taskicon}
+                      alt={task.title}
+                      width={48}
+                      height={48}
+                      className="relative z-10"
+                    />
+                  ) : (
+                    <span className="text-[24px] sm:text-[28px] relative z-10">{task.taskicon || '🎉'}</span>
+                  )}
                 </div>
                 
                 {/* 文本信息 */}
                 <div className="ml-3 sm:ml-4 flex-1 min-w-0">
                   {/* 任务标题 */}
-                  <div className="text-white text-[18px] sm:text-[20px] leading-[22px] sm:leading-[24px] font-normal font-jersey-25 mb-1 truncate">
+                  <div className="text-white text-[22px] sm:text-[20px] leading-[22px] sm:leading-[24px] font-normal font-jersey-10 mb-1 truncate">
                     {task.title}
                   </div>
                   
                   {/* 奖励信息 */}
                   <div className="flex items-center gap-1.5 sm:gap-2">
-                    {/* 徽章图标 */}
-                    <span className="text-[14px] sm:text-[16px] flex-shrink-0">{task.badgeicon}</span>
+                    {/* 徽章图标（统一使用图片 26×26，非图片字符串兼容显示）*/}
+                    {typeof task.badgeicon === 'string' && /\.(png|jpg|jpeg|svg|gif)$/i.test(task.badgeicon) ? (
+                      <Image
+                        src={task.badgeicon}
+                        alt="badge"
+                        width={26}
+                        height={26}
+                        className="flex-shrink-0"
+                      />
+                    ) : (
+                      <span className="text-[14px] sm:text-[16px] flex-shrink-0">{task.badgeicon}</span>
+                    )}
                     {/* 奖励数值 */}
-                    <span className="text-[#B2B2B2] text-[14px] sm:text-[16px] leading-[18px] sm:leading-[20px] font-normal font-jersey-25">
-                      +{task.reward.toLocaleString()}
+                    <span className="text-white text-[14px] sm:text-[16px] leading-[22px] sm:leading-[20px] font-normal font-exo2 text-center">
+                      *{task.reward.toLocaleString()}
                     </span>
                   </div>
                 </div>
@@ -243,9 +264,9 @@ export default function TaskPage() {
                  <div className="flex-shrink-0">
                    <button
                      className={`
-                       px-3 sm:px-4 py-1.5 sm:py-2 rounded-[10px] sm:rounded-[12px] min-w-[70px] sm:min-w-[80px] h-[36px] sm:h-[40px]
+                       px-3 sm:px-4 py-1.5 sm:py-2 rounded-[8px] w-[69px] height-[34px] sm:rounded-[12px] min-w-[70px] sm:min-w-[80px] h-[36px] sm:h-[40px]
                        flex items-center justify-center
-                       text-white text-[14px] sm:text-[16px] leading-[18px] sm:leading-[20px] font-normal font-jersey-25
+                       text-white text-[16px] sm:text-[16px] leading-[22px] sm:leading-[20px] font-normal font-jersey-10
                        transition-all duration-300 transform
                        ${
                          task.status === 'completed' 
