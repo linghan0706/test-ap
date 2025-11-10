@@ -38,13 +38,16 @@ function CardBackground({ isFlipped, heightPx, widthPx }: { isFlipped: boolean; 
   // Scale X coordinates to container width; keep Y in absolute pixels
   const sx = wPx / 361
   const X = (u: number) => (u * sx).toFixed(4)
+  // Shift for cut-corner region on X axis (absolute px in container space)
+  const CUT_X_SHIFT_PX = 10
+  const Xc = (u: number) => (u * sx + CUT_X_SHIFT_PX).toFixed(4)
 
   const dynamicD = `M${X(361)} ${TOP_ANCHOR_PX}
     C${X(361)} 48.8726 ${X(355.627)} ${TOP_FOLD_PX} ${X(349)} ${TOP_FOLD_PX}
-    H${X(186.459)}
-    C${X(182.705)} ${TOP_FOLD_PX} ${X(179.167)} 41.7433 ${X(176.899)} 38.7526
-    L${X(151.101)} 4.74736
-    C${X(148.833)} 1.75667 ${X(145.295)} 0 ${X(141.541)} 0
+    H${Xc(186.459)}
+    C${Xc(182.705)} ${TOP_FOLD_PX} ${Xc(179.167)} 41.7433 ${Xc(176.899)} 38.7526
+    L${Xc(151.101)} 4.74736
+    C${Xc(148.833)} 1.75667 ${Xc(145.295)} 0 ${Xc(141.541)} 0
     H${X(12)}
     C${X(5.37259)} 0 ${X(0)} 5.37258 ${X(0)} 12
     V${(hPx - BR_PX).toFixed(4)}
@@ -88,7 +91,7 @@ function CardBackground({ isFlipped, heightPx, widthPx }: { isFlipped: boolean; 
           filterUnits="objectBoundingBox"
           colorInterpolationFilters="sRGB"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feBlend
             mode="normal"
             in="SourceGraphic"
@@ -118,8 +121,8 @@ function CardBackground({ isFlipped, heightPx, widthPx }: { isFlipped: boolean; 
           y2="221.792"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#6B0AE9" />
-          <stop offset="1" stop-color="#6410B1" />
+          <stop stopColor="#6B0AE9" />
+          <stop offset="1" stopColor="#6410B1" />
         </linearGradient>
       </defs>
     </motion.svg>
@@ -175,8 +178,11 @@ export default function StorePage() {
           // Fallback based on tab default items
           count = tab === 'raffle' ? 1 : 4
         }
-        const size = computeSvgSize(count, containerWidth)
-        setSvgSize(size)
+        const predicted = computeSvgSize(count, containerWidth)
+        // Use parent wrapper's actual clientHeight to ensure full coverage on mobile
+        const height = el.clientHeight || predicted.height
+        const width = containerWidth
+        setSvgSize({ width, height })
       }, 150),
     [tab]
   )
@@ -260,14 +266,9 @@ export default function StorePage() {
         {/* 外层包裹 */}
         <div
           ref={wrapperRef}
-          className="relative w-[361px] max-w-[380px] sm:max-w-[400px] mx-auto mt-[20px] sm:mt-3 p-5 sm:p-6 bg-[linear-gradient(112.89deg,#6B0AE9_17.11%,#6410B1_83.06%)] overflow-y-auto max-h-[calc(100vh-260px)] sm:max-h-[calc(100vh-280px)] overflow-hidden"
+          className="relative w-[361px] max-w-[380px] sm:max-w-[400px] mx-auto mt-[20px] sm:mt-3 p-5 sm:p-6 bg-[#29006E] overflow-y-auto max-h-[calc(100vh-260px)] sm:max-h-[calc(100vh-280px)] overflow-hidden"
           style={{
             backgroundColor: '#29006E',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat',
-            backgroundBlendMode: 'overlay',
-            boxShadow: 'inset 0px 4px 9.6px rgba(255, 255, 255, 0.25)',
             borderRadius: '12px',
             border: '1px solid rgba(255,255,255,0.10)',
             perspective: '1000px',
