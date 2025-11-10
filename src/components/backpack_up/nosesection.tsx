@@ -10,14 +10,6 @@ type NoseSectionProps = {
   onUse?: () => void
 }
 
-/**
- * NoseSection
- * 依据提供的UI图进行还原：
- * - 顶部标题 "Nose Section" 与右上角帮助按钮
- * - 星空质感的卡片背景与圆角、描边
- * - 中心部件展示图（占位为 StageProgress.svg）
- * - 底部三枚操作按钮：Give / Sell / use
- */
 const NoseSection: React.FC<NoseSectionProps> = ({ className, onGive, onSell, onUse }) => {
   return (
     <section

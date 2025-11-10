@@ -30,19 +30,7 @@ export interface NoseSectionResultProps {
   className?: string
 }
 
-/**
- * NoseSectionResult 结果回执卡片
- * 完全按照提供的设计图进行视觉还原：
- * - 星空质感背景（/Popup/taskupback.svg）+ 圆角卡片 + 外部阴影
- * - 顶部标题、右上角帮助和关闭按钮
- * - 中心爆闪飞船图（默认 /backpack/StageProgress.svg）
- * - 底部操作按钮：成功 -> Confirm（绿色渐变），失败 -> contact customer service（红色渐变）
- *
- * 关键实现细节：
- * - 使用固定尺寸与 Tailwind 任意值类实现像素级还原（w-[317px] 等）
- * - 提供响应式：外层容器使用 max-w 与内边距，在小屏时不会截断；在大屏居中展示
- * - 可访问性：ARIA 属性、Esc 快捷关闭
- */
+
 const NoseSectionResult: React.FC<NoseSectionResultProps> = ({
   open = true,
   status,
@@ -55,15 +43,6 @@ const NoseSectionResult: React.FC<NoseSectionResultProps> = ({
   onContact,
   className,
 }) => {
-  // 键盘 Esc 关闭（可访问性）
-  useEffect(() => {
-    if (!open) return
-    const handler = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose?.()
-    }
-    window.addEventListener('keydown', handler)
-    return () => window.removeEventListener('keydown', handler)
-  }, [open, onClose])
 
   const isSuccess = status === 'success'
   const computedTitle = title ?? (isSuccess ? 'Successfully Sold' : 'Sale Failed')
@@ -141,21 +120,21 @@ const NoseSectionResult: React.FC<NoseSectionResultProps> = ({
             type="button"
             title="help"
             onClick={onHelp}
-            className="absolute right-[34px] top-3 w-[18px] h-[18px] rounded-[6px] flex items-center justify-center bg-[#2B2E5A] border border-white/20 text-white"
+            className="absolute right-[20px] top-3 w-[18px] h-[18px] rounded-[6px] flex items-center justify-center  text-white"
           >
-            <span className="text-[12px] leading-none">?</span>
+            <span className="text-[12px] leading-none">
+               <Image
+                          src="/backpack/son/question.png"
+                          alt="Help"
+                          width={10}
+                          height={10}
+                          className="w-[10px] h-[10px] object-contain"
+                          priority
+                        />
+            </span>
           </button>
 
-          {/* 关闭按钮（右上角 X） */}
-          <button
-            type="button"
-            title="close"
-            aria-label="Close"
-            onClick={onClose}
-            className="absolute right-2 top-2 w-[20px] h-[20px] rounded-[6px] flex items-center justify-center bg-[#2B2E5A] border border-white/20"
-          >
-            <span className="text-white text-[14px] leading-none">×</span>
-          </button>
+      
         </div>
 
         {/* 中心展示图（爆闪飞船） */}
