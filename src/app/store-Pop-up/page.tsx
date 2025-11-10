@@ -1,7 +1,10 @@
 'use client'
 
-import GiftProps from '@/components/backpack_up/GiftProps'
-import SelectCard from '@/components/backpackCard/SelectCard'
+import StoresTransactionResult from '@/components/stores_up/StoresTransactionResult'
+import StoresTransactionCard from '@/components/stores_up/StoresTransactionCard'
+import { useState } from 'react'
+import NoStoresTransactionCard from '@/components/backpack_up/nosesection'
+import NosesectionResult from '@/components/backpack_up/nosesectionResult'
 export default function StorePopupPage() {
   // const [activeIndex, setActiveIndex] = useState(0)
   // const [loading, setLoading] = useState(false)
@@ -26,12 +29,16 @@ export default function StorePopupPage() {
         error={error}
       />  */}
       {/* 支付组件 */}
+      {/* 支付组件 */}
       {/* Payment selection card preview */}
       {/* <StoresTransactionCard /> */}
-      {/* 礼物属性组件 */}
-      {/* Preview the SelectCard for visual verification */}
-      <SelectCard />
-      <GiftProps />
+
+      {/* 测试backpack组件 */}
+
+      {/* 兑换组件 */}
+      {/* <NoStoresTransactionCard/> */}
+      {/*结果页  */}
+      <NosesectionResult />
     </div>
   )
 }

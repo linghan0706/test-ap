@@ -133,10 +133,11 @@ const NoseSectionResult: React.FC<NoseSectionResultProps> = ({
             title="help"
             onClick={onHelp}
             className="absolute right-[20px] top-3 w-[18px] h-[18px] rounded-[6px] flex items-center justify-center  text-white"
+            className="absolute right-[20px] top-3 w-[18px] h-[18px] rounded-[6px] flex items-center justify-center  text-white"
           >
             <span className="text-[12px] leading-none">
               <Image
-                src="/backpack/question/question.png"
+                src="/backpack/son/question.png"
                 alt="Help"
                 width={10}
                 height={10}
