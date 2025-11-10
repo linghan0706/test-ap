@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from 'framer-motion'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { useSearchParams, useRouter } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import dynamic from 'next/dynamic'
 import backImage from '@/public/backImage.png'
 import AssetRedemption from '@/components/storeCard/AssetRedemption'
@@ -25,7 +25,15 @@ const flipVariants = {
   back: { rotateY: 180 },
 }
 
-function CardBackground({ isFlipped, heightPx, widthPx }: { isFlipped: boolean; heightPx?: number; widthPx?: number }) {
+function CardBackground({
+  isFlipped,
+  heightPx,
+  widthPx,
+}: {
+  isFlipped: boolean
+  heightPx?: number
+  widthPx?: number
+}) {
   // Use container pixel dimensions directly in viewBox so 1 unit = 1 px
   const wPx = widthPx && widthPx > 0 ? widthPx : 361
   const hRaw = heightPx && heightPx > 0 ? heightPx : 278
@@ -72,15 +80,15 @@ function CardBackground({ isFlipped, heightPx, widthPx }: { isFlipped: boolean; 
         transition: 'height 0.3s ease, width 0.3s ease',
       }}
       xmlns="http://www.w3.org/2000/svg"
-      >
-        <g filter="url(#filter0_i_4061_547)">
+    >
+      <g filter="url(#filter0_i_4061_547)">
         <motion.path
           d={dynamicD}
           fill="url(#paint0_linear_4061_547)"
           shapeRendering="geometricPrecision"
           transition={{ duration: 0.3, ease: 'easeInOut' }}
         />
-        </g>
+      </g>
       <defs>
         <filter
           id="filter0_i_4061_547"
@@ -111,7 +119,11 @@ function CardBackground({ isFlipped, heightPx, widthPx }: { isFlipped: boolean; 
             type="matrix"
             values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.25 0"
           />
-          <feBlend mode="normal" in2="shape" result="effect1_innerShadow_4061_547" />
+          <feBlend
+            mode="normal"
+            in2="shape"
+            result="effect1_innerShadow_4061_547"
+          />
         </filter>
         <linearGradient
           id="paint0_linear_4061_547"
@@ -131,17 +143,22 @@ function CardBackground({ isFlipped, heightPx, widthPx }: { isFlipped: boolean; 
 
 export default function StorePage() {
   const search = useSearchParams()
-  const router = useRouter()
   const tab = (search.get('tab') as 'raffle' | 'collector') || 'raffle'
   const { isOpen, payload, openModal, closeModal } = useTransactionModalStore()
   const wrapperRef = useRef<HTMLDivElement | null>(null)
-  const [svgSize, setSvgSize] = useState<{ width: number; height: number }>({ width: 0, height: 278 })
+  const [svgSize, setSvgSize] = useState<{ width: number; height: number }>({
+    width: 0,
+    height: 278,
+  })
 
   // Simple debounce helper
-  const debounce = (fn: (...args: any[]) => void, delay = 120) => {
-    let t: any
-    return (...args: any[]) => {
-      clearTimeout(t)
+  const debounce = <T extends (...args: unknown[]) => void>(
+    fn: T,
+    delay = 120
+  ) => {
+    let t: NodeJS.Timeout | null = null
+    return (...args: Parameters<T>) => {
+      if (t) clearTimeout(t)
       t = setTimeout(() => fn(...args), delay)
     }
   }
@@ -157,7 +174,13 @@ export default function StorePage() {
     let height = innerHeight + paddingY * 2 + navBlock
     // boundaries
     const minH = 278
-    const maxH = Math.max(minH, Math.floor((typeof window !== 'undefined' ? window.innerHeight : 800) - (containerWidth >= 640 ? 280 : 260)))
+    const maxH = Math.max(
+      minH,
+      Math.floor(
+        (typeof window !== 'undefined' ? window.innerHeight : 800) -
+          (containerWidth >= 640 ? 280 : 260)
+      )
+    )
     height = Math.max(minH, Math.min(height, maxH))
     const width = containerWidth
     return { width, height }
@@ -173,7 +196,9 @@ export default function StorePage() {
         let count = 0
         if (grid) {
           const children = Array.from(grid.children) as HTMLElement[]
-          count = children.filter((c) => c.getAttribute('aria-hidden') !== 'true').length
+          count = children.filter(
+            c => c.getAttribute('aria-hidden') !== 'true'
+          ).length
         } else {
           // Fallback based on tab default items
           count = tab === 'raffle' ? 1 : 4
@@ -275,7 +300,11 @@ export default function StorePage() {
           }}
         >
           {/* 背景 SVG，作为卡片背景，响应容器尺寸并可翻转 */}
-          <CardBackground isFlipped={tab === 'collector'} heightPx={svgSize.height} widthPx={svgSize.width} />
+          <CardBackground
+            isFlipped={tab === 'collector'}
+            heightPx={svgSize.height}
+            widthPx={svgSize.width}
+          />
 
           {/* 导航栏切换 */}
           <div className="relative z-10 flex flex-col items-center">
