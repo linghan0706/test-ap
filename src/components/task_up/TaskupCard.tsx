@@ -108,7 +108,7 @@ export default function TaskupCard({ items = defaultItems, loading = false, acti
             </div>
           )}
 
-          {activeItem.id !== 3 && activeItem.type && activeItem.type !== "" && (
+          {activeItem.id !== 3 && activeItem.type && (activeItem.type === "Continue" || activeItem.type === "Retry") && (
             <button
               className={`mt-2 w-[141px] h-[30px] px-[10px] py-[4px] rounded-[8px] flex flex-row items-center justify-center gap-1 text-white font-roboto font-medium text-[14px] leading-[22px] ${
                 activeItem.id === 1
