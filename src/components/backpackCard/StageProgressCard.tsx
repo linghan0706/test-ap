@@ -1,48 +1,48 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import Image from 'next/image'
 
-// 未使用的类型，保留以备将来使用
-// type Size2D = { w: number; h: number }
-// type OrbitRadii = { rx: number; ry: number }
+
+type Size2D = { w: number; h: number }
+type OrbitRadii = { rx: number; ry: number }
 type PartBoxCoord = { x: number; y: number }
 
-// 未使用的函数，保留以备将来使用
-// function computePartBoxSizes(
-//   parts: Array<{ installed?: boolean }>,
-//   installedSize: Size2D = { w: 48, h: 65 },
-//   uninstalledSize: Size2D = { w: 48, h: 48 }
-// ): Size2D[] {
-//   return parts.map((p) => (p?.installed ? installedSize : uninstalledSize))
-// }
+function computePartBoxSizes(
+  parts: Array<{ installed?: boolean }>,
+  installedSize: Size2D = { w: 48, h: 65 },
+  uninstalledSize: Size2D = { w: 48, h: 48 }
+): Size2D[] {
+  return parts.map((p) => (p?.installed ? installedSize : uninstalledSize))
+}
 
-// function maxBoxSize(sizes: Size2D[], partBoxSize: { width: number; height: number }): Size2D {
-//   const maxW = Math.max(...sizes.map((s) => s.w), partBoxSize.width)
-//   const maxH = Math.max(...sizes.map((s) => s.h), partBoxSize.height)
-//   return { w: maxW, h: maxH }
-// }
 
-// /**
-//  * Compute orbit radii based on plane and box sizes and ring padding.
-//  * Pure function.
-//  */
-// function computeOrbitRadii(
-//   planeSize: { width: number; height: number },
-//   maxBox: Size2D,
-//   ringPadding: number
-// ): OrbitRadii {
-//   return {
-//     rx: planeSize.width / 2 + maxBox.w / 2 + ringPadding,
-//     ry: planeSize.height / 2 + maxBox.h / 2 + ringPadding,
-//   }
-// }
+function maxBoxSize(sizes: Size2D[], partBoxSize: { width: number; height: number }): Size2D {
+  const maxW = Math.max(...sizes.map((s) => s.w), partBoxSize.width)
+  const maxH = Math.max(...sizes.map((s) => s.h), partBoxSize.height)
+  return { w: maxW, h: maxH }
+}
 
-// 未使用的函数，保留以备将来使用
-// function angleForIndex(i: number, startAngleDeg: number, N: number): number {
-//   const rad = Math.PI / 180
-//   return (startAngleDeg + (i * 360) / N) * rad
-// }
+/**
+ * Compute orbit radii based on plane and box sizes and ring padding.
+ * Pure function.
+ */
+function computeOrbitRadii(
+  planeSize: { width: number; height: number },
+  maxBox: Size2D,
+  ringPadding: number
+): OrbitRadii {
+  return {
+    rx: planeSize.width / 2 + maxBox.w / 2 + ringPadding,
+    ry: planeSize.height / 2 + maxBox.h / 2 + ringPadding,
+  }
+}
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
+function angleForIndex(i: number, startAngleDeg: number, N: number): number {
+  const rad = Math.PI / 180
+  return (startAngleDeg + (i * 360) / N) * rad
+}
+
+
 function clampToContainer(
   left: number,
   top: number,
@@ -56,41 +56,37 @@ function clampToContainer(
   return { left: clampedLeft, top: clampedTop }
 }
 
-// 未使用的函数，保留以备将来使用
-// function computePartCoordinates(params: {
-//   cardWidth: number
-//   cardHeight: number
-//   planeSize: { width: number; height: number }
-//   sizes: Size2D[]
-//   startAngleDeg: number
-//   radii: OrbitRadii
-// }): PartBoxCoord[] {
-//   const { cardWidth: cw, cardHeight: ch, sizes, startAngleDeg, radii } = params
-//   const cx = cw / 2
-//   const cy = ch / 2
-//   const N = sizes.length
-//   return sizes.map((s, i) => {
-//     const angle = angleForIndex(i, startAngleDeg, N)
-//     const centerX = cx + radii.rx * Math.cos(angle)
-//     const centerY = cy + radii.ry * Math.sin(angle)
-//     const left = centerX - s.w / 2
-//     const top = centerY - s.h / 2
-//     const clamped = clampToContainer(left, top, s.w, s.h, cw, ch)
-//     return { x: clamped.left, y: clamped.top }
-//   })
-// }
+
+function computePartCoordinates(params: {
+  cardWidth: number
+  cardHeight: number
+  planeSize: { width: number; height: number }
+  sizes: Size2D[]
+  startAngleDeg: number
+  radii: OrbitRadii
+}): PartBoxCoord[] {
+  const { cardWidth: cw, cardHeight: ch, sizes, startAngleDeg, radii } = params
+  const cx = cw / 2
+  const cy = ch / 2
+  const N = sizes.length
+  return sizes.map((s, i) => {
+    const angle = angleForIndex(i, startAngleDeg, N)
+    const centerX = cx + radii.rx * Math.cos(angle)
+    const centerY = cy + radii.ry * Math.sin(angle)
+    const left = centerX - s.w / 2
+    const top = centerY - s.h / 2
+    const clamped = clampToContainer(left, top, s.w, s.h, cw, ch)
+    return { x: clamped.left, y: clamped.top }
+  })
+}
 
 /** Runtime validation helpers */
 function isFiniteNumber(n: unknown): n is number {
   return typeof n === 'number' && Number.isFinite(n)
 }
 
-function validateCoordinates(
-  coords: PartBoxCoord[],
-  cw: number,
-  ch: number
-): PartBoxCoord[] {
-  return coords.map(p => {
+function validateCoordinates(coords: PartBoxCoord[], cw: number, ch: number): PartBoxCoord[] {
+  return coords.map((p) => {
     const x = isFiniteNumber(p.x) ? p.x : 0
     const y = isFiniteNumber(p.y) ? p.y : 0
     return {
@@ -100,10 +96,8 @@ function validateCoordinates(
   })
 }
 
-function toLeftTop(
-  coords: PartBoxCoord[]
-): Array<{ left: number; top: number }> {
-  return coords.map(c => ({ left: c.x, top: c.y }))
+function toLeftTop(coords: PartBoxCoord[]): Array<{ left: number; top: number }> {
+  return coords.map((c) => ({ left: c.x, top: c.y }))
 }
 
 export type StageProgressCardProps = {
@@ -123,41 +117,27 @@ export type StageProgressCardProps = {
   startAngleDeg?: number
   /** 飞机外扩的环形间距（避免与飞机相交），默认 12 */
   ringPadding?: number
-  /** 是否显示角落锁定 */
-  showCornerLocks?: boolean
-  /** 锁定位置数组 */
-  lockedPositions?: Array<{ left: number; top: number }>
-  /** 测试 ID */
-  'data-testid'?: string
 }
 
 // Stable default parts to avoid new array creation each render
-const DEFAULT_PARTS: Array<{
-  label: string
-  iconSrc?: string
-  installed?: boolean
-}> = [
+const DEFAULT_PARTS: Array<{ label: string; iconSrc?: string; installed?: boolean }> = [
   { label: 'Horizontal\nStabilizer' },
   { label: 'Vertical\nStabilizer' },
   { label: 'Landing\nGear' },
 ]
 
-// Item metadata mapped by PartCoordinate id
+// 零件盒子图标元数据
 type PartItemMeta = { iconSrc: string; label: string }
 const PART_ITEM_META: Record<number, PartItemMeta> = {
   // Known asset present in public/backpack/Part/verticalstabilizer.svg
-  1: {
-    iconSrc: '/backpack/Part/verticalstabilizer.svg',
-    label: 'Vertical Stabilizer',
-  },
+  1: { iconSrc: '/backpack/part/vertical_stabilizer.svg', label: 'Vertical Stabilizer' },
 }
 
 function getPartItemMeta(
   id: number | undefined,
   fallback: { iconSrc?: string; label?: string }
 ): { iconSrc?: string; label: string } {
-  if (!id)
-    return { iconSrc: fallback.iconSrc, label: fallback.label ?? 'Unknown' }
+  if (!id) return { iconSrc: fallback.iconSrc, label: fallback.label ?? 'Unknown' }
   const meta = PART_ITEM_META[id]
   if (meta) return meta
   return { iconSrc: fallback.iconSrc, label: fallback.label ?? 'Unknown' }
@@ -171,14 +151,9 @@ const StageProgressCard: React.FC<StageProgressCardProps> = ({
   badgeText = 'Blue Star',
   showBadge = true,
   parts = DEFAULT_PARTS,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  showCornerLocks,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  lockedPositions,
-  'data-testid': dataTestId,
-  // partBoxSize = { width: 112, height: 112 },
-  // startAngleDeg = -90,
-  // ringPadding = 12,
+  partBoxSize = { width: 112, height: 112 },
+  startAngleDeg = -90,
+  ringPadding = 12,
 }) => {
   // 通过容器宽度实现横向响应式缩放，使绝对定位在不同屏幕下保持比例
   const cardRef = useRef<HTMLDivElement | null>(null)
@@ -197,25 +172,29 @@ const StageProgressCard: React.FC<StageProgressCardProps> = ({
     ro.observe(el)
     return () => ro.disconnect()
   }, [])
-
+ 
+ // 零件盒子坐标（绝对定位），按每个盒子尺寸独立计算
+ const PartCoordinate=[
+  {id:1,x:200,y:10,active:true},
+  {id:2,x:200,y:280,active:false},
+  {id:3,x:0,y:0,active:false},
+ ]
   // 零件盒子坐标（绝对定位），按每个盒子尺寸独立计算
-  const PartCoordinate = useMemo(
-    () => [
-      { id: 1, x: 200, y: 10, active: true },
-      { id: 2, x: 200, y: 280, active: false },
-      { id: 3, x: 0, y: 0, active: false },
-    ],
-    []
+  const partsInstalledSignature = useMemo(
+    () => parts.map((p) => (p?.installed ? '1' : '0')).join('|'),
+    // 如果父组件每次返回新数组，但 installed 不变，则 signature 稳定
+    // 只在 installed 状态或长度变化时重新计算
+    [parts]
   )
 
   const partRenderData = useMemo(() => {
     // 改为仅由 PartCoordinate 数组驱动数量与定位，并进行运行时校验
     const cw = cardWidth
     const ch = cardHeight
-    const coords = PartCoordinate.map(c => ({ x: c.x, y: c.y }))
+    const coords = PartCoordinate.map((c) => ({ x: c.x, y: c.y }))
     const safeCoords = validateCoordinates(coords, cw, ch)
     return toLeftTop(safeCoords)
-  }, [cardWidth, cardHeight, PartCoordinate])
+  }, [cardWidth, cardHeight])
   return (
     <section
       className={[
@@ -228,7 +207,6 @@ const StageProgressCard: React.FC<StageProgressCardProps> = ({
         className ?? '',
       ].join(' ')}
       aria-label={title}
-      data-testid={dataTestId}
     >
       {/* 顶部左右布局：左侧标题 + 右侧徽章 */}
       <div className="w-full flex items-center justify-between box-border">
@@ -262,10 +240,7 @@ const StageProgressCard: React.FC<StageProgressCardProps> = ({
           const item = parts[idx]
           const installed = !!PartCoordinate[idx]?.active
           if (installed) {
-            const meta = getPartItemMeta(PartCoordinate[idx]?.id, {
-              iconSrc: item?.iconSrc,
-              label: item?.label,
-            })
+            const meta = getPartItemMeta(PartCoordinate[idx]?.id, { iconSrc: item?.iconSrc, label: item?.label })
             // 已存放零件：采用 installed 样式
             return (
               <div
@@ -277,13 +252,7 @@ const StageProgressCard: React.FC<StageProgressCardProps> = ({
                 <div className="flex flex-col items-center p-0 gap-[2px] w-[40px] h-[53px]">
                   <div className="flex flex-row items-center p-0 w-[27px] h-[27px]">
                     {meta?.iconSrc ? (
-                      <Image
-                        src={meta.iconSrc!}
-                        alt={meta.label}
-                        width={27}
-                        height={27}
-                        className="w-[27px] h-[27px] object-contain"
-                      />
+                      <Image src={meta.iconSrc!} alt={meta.label} width={27} height={27} className="w-[27px] h-[27px] object-contain" />
                     ) : null}
                   </div>
                   <div className="w-[40px] h-[24px] font-jersey-10 font-normal text-[10px] leading-[12px] text-center text-white flex-none order-1 self-stretch grow-0 whitespace-pre-line">
@@ -308,7 +277,7 @@ const StageProgressCard: React.FC<StageProgressCardProps> = ({
                 aria-hidden="true"
               >
                 <Image
-                  src="/backpack/son/locked.svg"
+                  src="/backpack/lock/locked.svg"
                   alt="Locked icon"
                   width={21}
                   height={23}
@@ -323,21 +292,9 @@ const StageProgressCard: React.FC<StageProgressCardProps> = ({
               >
                 Locked
               </div>
-              <svg
-                className="absolute inset-0 pointer-events-none"
-                width="100%"
-                height="100%"
-                viewBox="0 0 48 48"
-                xmlns="http://www.w3.org/2000/svg"
-              >
+              <svg className="absolute inset-0 pointer-events-none" width="100%" height="100%" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
                 <defs>
-                  <filter
-                    id="lockGlow"
-                    x="-50%"
-                    y="-50%"
-                    width="200%"
-                    height="200%"
-                  >
+                  <filter id="lockGlow" x="-50%" y="-50%" width="200%" height="200%">
                     <feGaussianBlur stdDeviation="1.2" result="blur" />
                     <feMerge>
                       <feMergeNode in="blur" />

@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from 'framer-motion'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { useSearchParams } from 'next/navigation'
+import { useSearchParams, useRouter } from 'next/navigation'
 import dynamic from 'next/dynamic'
 import backImage from '@/public/backImage.png'
 import AssetRedemption from '@/components/storeCard/AssetRedemption'
@@ -19,22 +19,13 @@ const StoresTransactionCardLazy = dynamic(
   }
 )
 
-// Flip animation variants for the background SVG
+
 const flipVariants = {
   front: { rotateY: 0 },
   back: { rotateY: 180 },
 }
 
-function CardBackground({
-  isFlipped,
-  heightPx,
-  widthPx,
-}: {
-  isFlipped: boolean
-  heightPx?: number
-  widthPx?: number
-}) {
-  // Use container pixel dimensions directly in viewBox so 1 unit = 1 px
+function CardBackground({ isFlipped, heightPx, widthPx }: { isFlipped: boolean; heightPx?: number; widthPx?: number }) {
   const wPx = widthPx && widthPx > 0 ? widthPx : 361
   const hRaw = heightPx && heightPx > 0 ? heightPx : 278
   const TOP_FOLD_PX = 43.5
@@ -43,10 +34,9 @@ function CardBackground({
   const MIN_H = Math.ceil(TOP_ANCHOR_PX + BR_PX) // > 55.5 + 12
   const hPx = Math.max(MIN_H, hRaw)
 
-  // Scale X coordinates to container width; keep Y in absolute pixels
   const sx = wPx / 361
   const X = (u: number) => (u * sx).toFixed(4)
-  // Shift for cut-corner region on X axis (absolute px in container space)
+ 
   const CUT_X_SHIFT_PX = 10
   const Xc = (u: number) => (u * sx + CUT_X_SHIFT_PX).toFixed(4)
 
@@ -63,102 +53,152 @@ function CardBackground({
     H${X(180.5)} H${X(349)}
     C${X(355.627)} ${hPx.toFixed(4)} ${X(361)} ${(hPx - 5.37259).toFixed(4)} ${X(361)} ${(hPx - BR_PX).toFixed(4)}
     V${TOP_ANCHOR_PX} Z`
+
+  const prefersReduced = typeof window !== 'undefined' ? window.matchMedia('(prefers-reduced-motion: reduce)').matches : false
+  const crossfadeDuration = prefersReduced ? 0.18 : 0.55
+  const crossfadeEase: any = prefersReduced ? 'linear' : [0.645, 0.045, 0.355, 1]
   return (
-    <motion.svg
-      className="absolute left-0 right-0 top-0 z-0 pointer-events-none"
-      width="100%"
-      height="100%"
-      viewBox={`0 0 ${wPx} ${hPx}`}
-      preserveAspectRatio="none"
-      initial={false}
-      animate={isFlipped ? 'back' : 'front'}
-      variants={flipVariants}
-      transition={{ duration: 0.4, ease: 'easeInOut' }}
-      style={{
-        display: 'block',
-        transformStyle: 'preserve-3d',
-        transition: 'height 0.3s ease, width 0.3s ease',
-      }}
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <g filter="url(#filter0_i_4061_547)">
-        <motion.path
-          d={dynamicD}
-          fill="url(#paint0_linear_4061_547)"
-          shapeRendering="geometricPrecision"
-          transition={{ duration: 0.3, ease: 'easeInOut' }}
-        />
-      </g>
-      <defs>
-        <filter
-          id="filter0_i_4061_547"
-          x="0"
-          y="0"
+    <AnimatePresence>
+      {isFlipped ? (
+        <motion.svg
+          key="back"
+          className="absolute inset-0 z-0 pointer-events-none"
           width="100%"
           height="100%"
-          filterUnits="objectBoundingBox"
-          colorInterpolationFilters="sRGB"
+          viewBox={`0 0 ${wPx} ${hPx}`}
+          preserveAspectRatio="none"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: crossfadeDuration, ease: crossfadeEase }}
+          style={{
+            display: 'block',
+            transform: 'scaleX(-1)',
+            willChange: 'opacity',
+            transition: 'height 0.3s ease, width 0.3s ease',
+            height: hPx,
+          }}
+          xmlns="http://www.w3.org/2000/svg"
         >
-          <feFlood floodOpacity="0" result="BackgroundImageFix" />
-          <feBlend
-            mode="normal"
-            in="SourceGraphic"
-            in2="BackgroundImageFix"
-            result="shape"
-          />
-          <feColorMatrix
-            in="SourceAlpha"
-            type="matrix"
-            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-            result="hardAlpha"
-          />
-          <feOffset dy="4" />
-          <feGaussianBlur stdDeviation="4.8" />
-          <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1" />
-          <feColorMatrix
-            type="matrix"
-            values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.25 0"
-          />
-          <feBlend
-            mode="normal"
-            in2="shape"
-            result="effect1_innerShadow_4061_547"
-          />
-        </filter>
-        <linearGradient
-          id="paint0_linear_4061_547"
-          x1="316.5"
-          y1="79.0282"
-          x2="56.158"
-          y2="221.792"
-          gradientUnits="userSpaceOnUse"
+          <g filter="url(#filter0_i_4061_547)">
+            <motion.path
+              d={dynamicD}
+              fill="url(#paint0_linear_4061_547)"
+              shapeRendering="geometricPrecision"
+              transition={{ duration: crossfadeDuration, ease: crossfadeEase }}
+            />
+          </g>
+          <defs>
+            <filter
+              id="filter0_i_4061_547"
+              x="0"
+              y="0"
+              width="100%"
+              height="100%"
+              filterUnits="objectBoundingBox"
+              colorInterpolationFilters="sRGB"
+            >
+              <feFlood floodOpacity="0" result="BackgroundImageFix" />
+              <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
+              <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+              <feOffset dy="4" />
+              <feGaussianBlur stdDeviation="4.8" />
+              <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1" />
+              <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.25 0" />
+              <feBlend mode="normal" in2="shape" result="effect1_innerShadow_4061_547" />
+            </filter>
+            <linearGradient
+              id="paint0_linear_4061_547"
+              x1="316.5"
+              y1="79.0282"
+              x2="56.158"
+              y2="221.792"
+              gradientUnits="userSpaceOnUse"
+            >
+              <stop stopColor="#6B0AE9" />
+              <stop offset="1" stopColor="#6410B1" />
+            </linearGradient>
+          </defs>
+        </motion.svg>
+      ) : (
+        <motion.svg
+          key="front"
+          className="absolute inset-0 z-0 pointer-events-none"
+          width="100%"
+          height="100%"
+          viewBox={`0 0 ${wPx} ${hPx}`}
+          preserveAspectRatio="none"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: crossfadeDuration, ease: crossfadeEase }}
+          style={{
+            display: 'block',
+            transform: 'scaleX(1)',
+            willChange: 'opacity',
+            transition: 'height 0.3s ease, width 0.3s ease',
+            height: hPx,
+          }}
+          xmlns="http://www.w3.org/2000/svg"
         >
-          <stop stopColor="#6B0AE9" />
-          <stop offset="1" stopColor="#6410B1" />
-        </linearGradient>
-      </defs>
-    </motion.svg>
+          <g filter="url(#filter0_i_4061_547)">
+            <motion.path
+              d={dynamicD}
+              fill="url(#paint0_linear_4061_547)"
+              shapeRendering="geometricPrecision"
+              transition={{ duration: crossfadeDuration, ease: crossfadeEase }}
+            />
+          </g>
+          <defs>
+            <filter
+              id="filter0_i_4061_547"
+              x="0"
+              y="0"
+              width="100%"
+              height="100%"
+              filterUnits="objectBoundingBox"
+              colorInterpolationFilters="sRGB"
+            >
+              <feFlood floodOpacity="0" result="BackgroundImageFix" />
+              <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
+              <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+              <feOffset dy="4" />
+              <feGaussianBlur stdDeviation="4.8" />
+              <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1" />
+              <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.25 0" />
+              <feBlend mode="normal" in2="shape" result="effect1_innerShadow_4061_547" />
+            </filter>
+            <linearGradient
+              id="paint0_linear_4061_547"
+              x1="316.5"
+              y1="79.0282"
+              x2="56.158"
+              y2="221.792"
+              gradientUnits="userSpaceOnUse"
+            >
+              <stop stopColor="#6B0AE9" />
+              <stop offset="1" stopColor="#6410B1" />
+            </linearGradient>
+          </defs>
+        </motion.svg>
+      )}
+    </AnimatePresence>
   )
 }
 
 export default function StorePage() {
   const search = useSearchParams()
+  const router = useRouter()
   const tab = (search.get('tab') as 'raffle' | 'collector') || 'raffle'
   const { isOpen, payload, openModal, closeModal } = useTransactionModalStore()
   const wrapperRef = useRef<HTMLDivElement | null>(null)
-  const [svgSize, setSvgSize] = useState<{ width: number; height: number }>({
-    width: 0,
-    height: 278,
-  })
+  const [svgSize, setSvgSize] = useState<{ width: number; height: number }>({ width: 0, height: 278 })
 
   // Simple debounce helper
-  const debounce = <T extends (...args: unknown[]) => void>(
-    fn: T,
-    delay = 120
-  ) => {
-    let t: NodeJS.Timeout | null = null
-    return (...args: Parameters<T>) => {
-      if (t) clearTimeout(t)
+  const debounce = (fn: (...args: any[]) => void, delay = 120) => {
+    let t: any
+    return (...args: any[]) => {
+      clearTimeout(t)
       t = setTimeout(() => fn(...args), delay)
     }
   }
@@ -174,13 +214,7 @@ export default function StorePage() {
     let height = innerHeight + paddingY * 2 + navBlock
     // boundaries
     const minH = 278
-    const maxH = Math.max(
-      minH,
-      Math.floor(
-        (typeof window !== 'undefined' ? window.innerHeight : 800) -
-          (containerWidth >= 640 ? 280 : 260)
-      )
-    )
+    const maxH = Math.max(minH, Math.floor((typeof window !== 'undefined' ? window.innerHeight : 800) - (containerWidth >= 640 ? 280 : 260)))
     height = Math.max(minH, Math.min(height, maxH))
     const width = containerWidth
     return { width, height }
@@ -196,17 +230,16 @@ export default function StorePage() {
         let count = 0
         if (grid) {
           const children = Array.from(grid.children) as HTMLElement[]
-          count = children.filter(
-            c => c.getAttribute('aria-hidden') !== 'true'
-          ).length
+          count = children.filter((c) => c.getAttribute('aria-hidden') !== 'true').length
         } else {
           // Fallback based on tab default items
           count = tab === 'raffle' ? 1 : 4
         }
         const predicted = computeSvgSize(count, containerWidth)
-        // Use parent wrapper's actual clientHeight to ensure full coverage on mobile
-        const height = el.clientHeight || predicted.height
-        const width = containerWidth
+        // Use precise bounding rect to match the parent container’s rendered box
+        const rect = el.getBoundingClientRect()
+        const height = Math.round(rect.height) || predicted.height
+        const width = Math.round(rect.width) || containerWidth
         setSvgSize({ width, height })
       }, 150),
     [tab]
@@ -291,20 +324,17 @@ export default function StorePage() {
         {/* 外层包裹 */}
         <div
           ref={wrapperRef}
-          className="relative w-[361px] max-w-[380px] sm:max-w-[400px] mx-auto mt-[20px] sm:mt-3 p-5 sm:p-6 bg-[#29006E] overflow-y-auto max-h-[calc(100vh-260px)] sm:max-h-[calc(100vh-280px)] overflow-hidden"
+        id="store-scroll-container"
+        className="relative w-[361px] max-w-[380px] sm:max-w-[400px] mx-auto mt-[20px] sm:mt-3 p-5 sm:p-6 bg-[#29006E] overflow-y-auto no-scrollbar overflow-anchor-none h-[calc(100vh-260px)] sm:h-[calc(100vh-280px)]"
           style={{
             backgroundColor: '#29006E',
             borderRadius: '12px',
             border: '1px solid rgba(255,255,255,0.10)',
-            perspective: '1000px',
+            perspective: 'none',
           }}
         >
           {/* 背景 SVG，作为卡片背景，响应容器尺寸并可翻转 */}
-          <CardBackground
-            isFlipped={tab === 'collector'}
-            heightPx={svgSize.height}
-            widthPx={svgSize.width}
-          />
+          <CardBackground isFlipped={tab === 'collector'} heightPx={svgSize.height} widthPx={svgSize.width} />
 
           {/* 导航栏切换 */}
           <div className="relative z-10 flex flex-col items-center">
