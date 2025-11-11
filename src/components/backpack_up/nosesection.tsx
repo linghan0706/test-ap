@@ -49,7 +49,7 @@ const NoseSection: React.FC<NoseSectionProps> = ({ className, onGive, onSell, on
           className="absolute right-3 top-3 w-[22px] h-[22px] rounded-[6px] flex items-center justify-center bg-[#2B2E5A] border border-white/20"
         >
           <Image
-            src="/backpack/son/question.png"
+            src="/backpack/question/question.png"
             alt="Help"
             width={10}
             height={10}

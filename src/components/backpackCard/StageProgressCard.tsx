@@ -126,11 +126,11 @@ const DEFAULT_PARTS: Array<{ label: string; iconSrc?: string; installed?: boolea
   { label: 'Landing\nGear' },
 ]
 
-// Item metadata mapped by PartCoordinate id
+// 零件盒子图标元数据
 type PartItemMeta = { iconSrc: string; label: string }
 const PART_ITEM_META: Record<number, PartItemMeta> = {
   // Known asset present in public/backpack/Part/verticalstabilizer.svg
-  1: { iconSrc: '/backpack/Part/verticalstabilizer.svg', label: 'Vertical Stabilizer' },
+  1: { iconSrc: '/backpack/part/vertical_stabilizer.svg', label: 'Vertical Stabilizer' },
 }
 
 function getPartItemMeta(
@@ -277,7 +277,7 @@ const StageProgressCard: React.FC<StageProgressCardProps> = ({
                 aria-hidden="true"
               >
                 <Image
-                  src="/backpack/son/locked.svg"
+                  src="/backpack/lock/locked.svg"
                   alt="Locked icon"
                   width={21}
                   height={23}

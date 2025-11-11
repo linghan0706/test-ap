@@ -61,7 +61,7 @@ export default function AutomaticCollectorGrid({
     <div
       role="grid"
       aria-busy={loading}
-      className="grid grid-cols-2 justify-items-center gap-x-4 sm:gap-x-6 gap-y-5 sm:gap-y-8 w-full max-w-[380px] sm:max-w-[400px] mx-auto px-1.5"
+      className="grid grid-cols-2 justify-items-center gap-x-4 sm:gap-x-6 gap-y-5 sm:gap-y-8 w-full max-w-[380px] sm:max-w-[400px] mx-auto px-1.5 overflow-hidden"
     >
       {loading &&
         Array.from({ length: 4 }).map((_, i) => (
