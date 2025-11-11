@@ -16,7 +16,7 @@ function vibrateLights() {
   if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
     window.Telegram.WebApp.HapticFeedback?.impactOccurred('light')
   } else {
-    console.warn('震动触发：轻微')
+    console.warn('Vibration triggered: light')
   }
 }
 

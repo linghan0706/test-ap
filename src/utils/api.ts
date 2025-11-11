@@ -74,7 +74,7 @@ export async function telegramLogin(): Promise<TelegramLoginResponse | LoginErro
     const requestData: TelegramLoginRequest = {
       initData: initDataResult.initData
     }
-    console.log('正在发送 Telegram 登录请求...')
+    console.log('Sending Telegram login request...')
     console.log('InitData:', initDataResult.initData)
 
     // 3. 发送 POST 请求到后端
