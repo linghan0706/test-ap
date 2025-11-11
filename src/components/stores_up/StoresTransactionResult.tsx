@@ -85,7 +85,7 @@ export default function StoresTransactionResult({
 
           {/* 中间插图（静态演示图） */}
           <Image
-            src="/automaticcollector/super.png"
+            src="/stores/AutomaticCollector/super.svg"
             alt="reward"
             width={200}
             height={200}
