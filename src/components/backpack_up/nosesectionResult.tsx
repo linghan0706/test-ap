@@ -1,6 +1,6 @@
-"use client"
+'use client'
 
-import React, { useEffect } from 'react'
+import React from 'react'
 import Image from 'next/image'
 
 // 结果状态类型（严格类型）
@@ -30,22 +30,21 @@ export interface NoseSectionResultProps {
   className?: string
 }
 
-
 const NoseSectionResult: React.FC<NoseSectionResultProps> = ({
   open = true,
   status,
   title,
   description,
   imageSrc = '/backpack/StageProgress.svg',
-  onClose,
+  onClose: _onClose,
   onHelp,
   onConfirm,
   onContact,
   className,
 }) => {
-
   const isSuccess = status === 'success'
-  const computedTitle = title ?? (isSuccess ? 'Successfully Sold' : 'Sale Failed')
+  const computedTitle =
+    title ?? (isSuccess ? 'Successfully Sold' : 'Sale Failed')
 
   // 成功/失败按钮样式与文案
   const actionLabel = isSuccess ? 'Confirm' : 'contact customer service'
@@ -63,7 +62,13 @@ const NoseSectionResult: React.FC<NoseSectionResultProps> = ({
       className="flex-none"
     >
       <circle cx="9" cy="9" r="8" stroke="white" strokeWidth="2" fill="none" />
-      <path d="M5 9.5 L7.5 12 L13 6.5" stroke="white" strokeWidth="2" fill="none" strokeLinecap="round" />
+      <path
+        d="M5 9.5 L7.5 12 L13 6.5"
+        stroke="white"
+        strokeWidth="2"
+        fill="none"
+        strokeLinecap="round"
+      />
     </svg>
   )
 
@@ -76,7 +81,12 @@ const NoseSectionResult: React.FC<NoseSectionResultProps> = ({
       className="flex-none"
     >
       <circle cx="9" cy="9" r="8" stroke="white" strokeWidth="2" fill="none" />
-      <path d="M6 6 L12 12 M12 6 L6 12" stroke="white" strokeWidth="2" strokeLinecap="round" />
+      <path
+        d="M6 6 L12 12 M12 6 L6 12"
+        stroke="white"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
     </svg>
   )
 
@@ -104,7 +114,7 @@ const NoseSectionResult: React.FC<NoseSectionResultProps> = ({
           aria-hidden
           className="absolute inset-0"
           style={{
-            backgroundImage: "url(/Popup/taskupback.svg)",
+            backgroundImage: 'url(/Popup/taskupback.svg)',
             backgroundRepeat: 'no-repeat',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
@@ -113,7 +123,9 @@ const NoseSectionResult: React.FC<NoseSectionResultProps> = ({
 
         {/* 顶部标题与操作按钮 */}
         <div className="relative z-10 w-full flex items-center justify-center pt-4 pb-2">
-          <h2 className="font-jersey-10 text-white text-[22px] leading-[22px]">{computedTitle}</h2>
+          <h2 className="font-jersey-10 text-white text-[22px] leading-[22px]">
+            {computedTitle}
+          </h2>
 
           {/* 问号帮助按钮 */}
           <button
@@ -123,18 +135,16 @@ const NoseSectionResult: React.FC<NoseSectionResultProps> = ({
             className="absolute right-[20px] top-3 w-[18px] h-[18px] rounded-[6px] flex items-center justify-center  text-white"
           >
             <span className="text-[12px] leading-none">
-               <Image
-                          src="/backpack/question/question.png"
-                          alt="Help"
-                          width={10}
-                          height={10}
-                          className="w-[10px] h-[10px] object-contain"
-                          priority
-                        />
+              <Image
+                src="/backpack/question/question.png"
+                alt="Help"
+                width={10}
+                height={10}
+                className="w-[10px] h-[10px] object-contain"
+                priority
+              />
             </span>
           </button>
-
-      
         </div>
 
         {/* 中心展示图（爆闪飞船） */}
@@ -167,7 +177,9 @@ const NoseSectionResult: React.FC<NoseSectionResultProps> = ({
           </button>
 
           {description && (
-            <p className="mt-2 text-center text-[#E4E4E4] font-roboto text-[12px] leading-[18px]">{description}</p>
+            <p className="mt-2 text-center text-[#E4E4E4] font-roboto text-[12px] leading-[18px]">
+              {description}
+            </p>
           )}
         </div>
       </section>

@@ -15,11 +15,17 @@ export default function StoreTabs() {
   const current: TabKey = (search.get('tab') as TabKey) || 'raffle'
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && 'scrollRestoration' in window.history) {
+    if (
+      typeof window !== 'undefined' &&
+      'scrollRestoration' in window.history
+    ) {
       window.history.scrollRestoration = 'manual'
     }
     return () => {
-      if (typeof window !== 'undefined' && 'scrollRestoration' in window.history) {
+      if (
+        typeof window !== 'undefined' &&
+        'scrollRestoration' in window.history
+      ) {
         window.history.scrollRestoration = 'auto'
       }
     }
@@ -28,8 +34,12 @@ export default function StoreTabs() {
   const getScrollContainer = (): HTMLElement | null => {
     if (typeof document === 'undefined') return null
     return (
-      (document.getElementById('store-scroll-container') as HTMLElement | null) ||
-      (document.querySelector('[data-store-scroll-container]') as HTMLElement | null)
+      (document.getElementById(
+        'store-scroll-container'
+      ) as HTMLElement | null) ||
+      (document.querySelector(
+        '[data-store-scroll-container]'
+      ) as HTMLElement | null)
     )
   }
 
@@ -42,7 +52,10 @@ export default function StoreTabs() {
         scrollRatioRef.current = max > 0 ? el.scrollTop / max : 0
         try {
           sessionStorage.setItem('store_scroll_top', String(scrollYRef.current))
-          sessionStorage.setItem('store_scroll_ratio', String(scrollRatioRef.current ?? ''))
+          sessionStorage.setItem(
+            'store_scroll_ratio',
+            String(scrollRatioRef.current ?? '')
+          )
           sessionStorage.setItem('store_scroll_ts', String(Date.now()))
         } catch {}
       } else {
@@ -66,11 +79,16 @@ export default function StoreTabs() {
     const el = getScrollContainer()
     if (!el) return
 
-    let savedTop = Number(sessionStorage.getItem('store_scroll_top') || '0')
+    const savedTop = Number(sessionStorage.getItem('store_scroll_top') || '0')
     const savedRatioRaw = sessionStorage.getItem('store_scroll_ratio')
-    const savedRatio = savedRatioRaw !== null && savedRatioRaw !== '' ? Number(savedRatioRaw) : null
+    const savedRatio =
+      savedRatioRaw !== null && savedRatioRaw !== ''
+        ? Number(savedRatioRaw)
+        : null
 
-    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const prefersReduced = window.matchMedia(
+      '(prefers-reduced-motion: reduce)'
+    ).matches
     const behavior: ScrollBehavior = prefersReduced ? 'auto' : 'smooth'
 
     const applyRestore = () => {
@@ -100,7 +118,8 @@ export default function StoreTabs() {
     observer.observe(el, { childList: true, subtree: true })
     const imgs = Array.from(el.querySelectorAll('img'))
     imgs.forEach(img => {
-      if (!img.complete) img.addEventListener('load', applyRestore, { once: true })
+      if (!img.complete)
+        img.addEventListener('load', applyRestore, { once: true })
     })
 
     // 清理并移除存储
@@ -128,16 +147,22 @@ export default function StoreTabs() {
           }`}
           style={{ textShadow: '0 0 4px #6B0AE9' }}
         >
-          <span className="ml-[24px] text-[22px] font-jersey-10 leading-[22px] whitespace-nowrap">Raffle Ticket</span>
+          <span className="ml-[24px] text-[22px] font-jersey-10 leading-[22px] whitespace-nowrap">
+            Raffle Ticket
+          </span>
         </div>
         <div
           onClick={() => setTab('collector')}
           className={`font-jersey-10 transition-opacity duration-200 ease-in-out font-[24px] uppercase leading-[22px] tracking-wide text-white ${
-            current === 'collector' ? 'opacity-100' : 'opacity-70 hover:opacity-90'
+            current === 'collector'
+              ? 'opacity-100'
+              : 'opacity-70 hover:opacity-90'
           }`}
           style={{ textShadow: '0 0 4px #6B0AE9' }}
         >
-          <span className="ml-[40px] text-[20px] font-jersey-10 leading-[22px] whitespace-nowrap">Automatic Collector</span>
+          <span className="ml-[40px] text-[20px] font-jersey-10 leading-[22px] whitespace-nowrap">
+            Automatic Collector
+          </span>
         </div>
       </div>
     </div>
