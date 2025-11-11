@@ -19,11 +19,6 @@ const StoresTransactionCardLazy = dynamic(
   }
 )
 
-const flipVariants = {
-  front: { rotateY: 0 },
-  back: { rotateY: 180 },
-}
-
 function CardBackground({
   isFlipped,
   heightPx,
@@ -66,9 +61,9 @@ function CardBackground({
       ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
       : false
   const crossfadeDuration = prefersReduced ? 0.18 : 0.55
-  const crossfadeEase: any = prefersReduced
-    ? 'linear'
-    : [0.645, 0.045, 0.355, 1]
+  const crossfadeEase = prefersReduced
+    ? ('linear' as const)
+    : ([0.645, 0.045, 0.355, 1] as const)
   return (
     <AnimatePresence>
       {isFlipped ? (
@@ -305,11 +300,7 @@ export default function StorePage() {
           count = tab === 'raffle' ? 1 : 4
         }
         const predicted = computeSvgSize(count, containerWidth)
-        // Use precise bounding rect to match the parent container’s rendered box
-        const rect = el.getBoundingClientRect()
-        const height = Math.round(rect.height) || predicted.height
-        const width = Math.round(rect.width) || containerWidth
-        // Use precise bounding rect to match the parent container’s rendered box
+        // Use precise bounding rect to match the parent container's rendered box
         const rect = el.getBoundingClientRect()
         const height = Math.round(rect.height) || predicted.height
         const width = Math.round(rect.width) || containerWidth
@@ -403,7 +394,6 @@ export default function StorePage() {
             backgroundColor: '#29006E',
             borderRadius: '12px',
             border: '1px solid rgba(255,255,255,0.10)',
-            perspective: 'none',
             perspective: 'none',
           }}
         >
