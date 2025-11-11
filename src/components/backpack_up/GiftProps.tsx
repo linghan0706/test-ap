@@ -19,7 +19,7 @@ export default function GiftProps({
   defaultAmount = 1,
   onCancel,
   onConfirm,
-  className: _className = '',
+  className = '',
 }: GiftPropsModalProps) {
   const [username, setUsername] = useState(defaultUsername)
   const [amount, setAmount] = useState<number>(defaultAmount)
@@ -74,7 +74,7 @@ export default function GiftProps({
             className="absolute right-3 top-3 w-6 h-6 rounded-full flex items-center justify-center text-white/80 hover:text-white"
             onClick={onCancel}
           >
-            <Image
+            <img
               src="/backpack/gift_props/off.svg"
               width={10}
               height={10}
@@ -99,7 +99,7 @@ export default function GiftProps({
               </h2>
             </div>
             <p className="mt-2 text-[#E4E4E4] text-[14px] leading-[22px]">
-              Enter your friend&apos;s Telegram username
+              Enter your friend's Telegram username
             </p>
           </div>
 

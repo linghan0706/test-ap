@@ -137,7 +137,7 @@ const NoseSectionResult: React.FC<NoseSectionResultProps> = ({
           >
             <span className="text-[12px] leading-none">
               <Image
-                src="/backpack/son/question.png"
+                src="/backpack/question/question.png"
                 alt="Help"
                 width={10}
                 height={10}
