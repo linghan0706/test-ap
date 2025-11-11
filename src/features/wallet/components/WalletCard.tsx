@@ -29,7 +29,7 @@ export default function WalletCard({ wallet, onDisconnect, loading = false }: Wa
       const success = await copyToClipboard(wallet.address)
       if (success) {
         // 这里可以添加成功提示
-        console.log('地址已复制到剪贴板')
+        console.log('Address copied to clipboard')
       }
     }
   }

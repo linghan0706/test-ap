@@ -9,41 +9,41 @@ export default function HomePage() {
   useEffect(() => {
     const data = getInitData()
     
-    console.log('获取到Telegram InitData:', data)
-    console.log('格式处理：',initData)
+    console.log('Got Telegram InitData:', data)
+    console.log('Formatted initData:', initData)
     if (isTelegramEnvironment()) {
       try {
         const lp = retrieveLaunchParams()
         console.log('SDK LaunchParams:', lp)
       } catch (e) {
-        console.warn('读取 LaunchParams 失败（已忽略）:', e)
+        console.warn('Failed to read LaunchParams (ignored):', e)
       }
       let rawInit: string | null = null
       try {
         rawInit = retrieveRawInitData() || null
         console.log('SDK raw initData:', rawInit)
       } catch (e) {
-        console.warn('读取 raw initData 失败（已忽略）:', e)
+        console.warn('Failed to read raw initData (ignored):', e)
       }
 
       if (rawInit) {
         telegramLogin()
           .then(res => {
-            console.log('Telegram 登录结果:', res);
+            console.log('Telegram login result:', res);
             if (res.success) {
-              console.log('登录成功，用户数据:', res.data);
+              console.log('Login successful, user data:', res.data);
             } else {
-              console.log('登录失败:', res.message);
+              console.log('Login failed:', res.message);
             }
           })
           .catch(err => {
-            console.error('Telegram 登录出错:', err);
+            console.error('Telegram login error:', err);
           });
       } else {
-        console.warn('未获取到 raw initData，跳过登录请求。')
+        console.warn('No raw initData found, skipping login request.')
       }
     } else {
-      console.warn('当前不在 Telegram 环境，跳过 SDK 参数读取与登录。')
+      console.warn('Not in Telegram environment, skipping SDK parameter reading and login.')
     }
   }, [])
 

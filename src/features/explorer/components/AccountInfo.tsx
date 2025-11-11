@@ -24,7 +24,7 @@ export default function AccountInfo({ account, loading = false, onRefresh }: Acc
   const handleCopyAddress = async () => {
     const success = await copyToClipboard(account.address)
     if (success) {
-      console.log('地址已复制')
+      console.log('Address copied')
     }
   }
 
@@ -67,7 +67,7 @@ export default function AccountInfo({ account, loading = false, onRefresh }: Acc
             <Button
               type="text"
               icon={<ExportOutlined />}
-              onClick={() => console.log('导出功能开发中...')}
+              onClick={() => console.log('Export feature under development...')}
             />
           </Tooltip>
         </Space>
