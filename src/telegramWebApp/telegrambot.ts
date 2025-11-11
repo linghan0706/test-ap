@@ -8,7 +8,7 @@ import { retrieveRawInitData, retrieveLaunchParams } from '@telegram-apps/sdk-re
  */
 export function initializeTelegramApp() {
   if (typeof window === 'undefined' || !window.Telegram?.WebApp) {
-    console.warn('当前不在 Telegram WebApp 环境中');
+    console.warn('Not currently in Telegram WebApp environment');
     return null;
   }
   try {
@@ -19,7 +19,7 @@ export function initializeTelegramApp() {
     }
     return tg;
   } catch (e) {
-    console.warn('初始化 Telegram WebApp 失败：', e);
+    console.warn('Failed to initialize Telegram WebApp:', e);
     return null;
   }
 }
@@ -43,7 +43,7 @@ export function getInitData(): TelegramInitData | null {
     const parsed = parseInitDataQueryString(raw);
     return parsed;
   } catch (e) {
-    console.warn('通过 SDK 获取 initData 失败：', e);
+    console.warn('Failed to get initData via SDK:', e);
     return null;
   }
 }
@@ -83,7 +83,7 @@ export function getFormattedInitData(): { initData: string } | null {
     // 直接返回 SDK 的原始 initData（完整查询字符串，包含 signature、chat_instance 等）
     return { initData: raw };
   } catch (e) {
-    console.warn('读取原始 initData 失败：', e);
+    console.warn('Failed to read raw initData:', e);
     return null;
   }
 }
@@ -138,7 +138,7 @@ function parseInitDataQueryString(raw: string): TelegramInitData {
         is_premium: u.is_premium,
       };
     } catch (e) {
-      console.warn('解析 user 字段失败（忽略该字段）：', e);
+      console.warn('Failed to parse user field (ignoring this field):', e);
     }
   }
 
