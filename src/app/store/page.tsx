@@ -19,11 +19,6 @@ const StoresTransactionCardLazy = dynamic(
   }
 )
 
-const flipVariants = {
-  front: { rotateY: 0 },
-  back: { rotateY: 180 },
-}
-
 function CardBackground({
   isFlipped,
   heightPx,
@@ -66,9 +61,9 @@ function CardBackground({
       ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
       : false
   const crossfadeDuration = prefersReduced ? 0.18 : 0.55
-  const crossfadeEase: any = prefersReduced
-    ? 'linear'
-    : [0.645, 0.045, 0.355, 1]
+  const crossfadeEase = prefersReduced
+    ? ('linear' as const)
+    : ([0.645, 0.045, 0.355, 1] as const)
   return (
     <AnimatePresence>
       {isFlipped ? (

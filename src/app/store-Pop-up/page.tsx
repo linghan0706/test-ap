@@ -1,10 +1,5 @@
 'use client'
 
-import StoresTransactionResult from '@/components/stores_up/StoresTransactionResult'
-import StoresTransactionCard from '@/components/stores_up/StoresTransactionCard'
-import { useState } from 'react'
-import NoStoresTransactionCard from '@/components/backpack_up/Nosesection'
-import NosesectionResult from '@/components/backpack_up/NosesectionResult'
 import GiftProps from '@/components/backpack_up/GiftProps'
 import SelectCard from '@/components/backpackCard/SelectCard'
 export default function StorePopupPage() {
