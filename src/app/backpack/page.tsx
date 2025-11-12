@@ -1,10 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import dynamic from 'next/dynamic'
-const MotionDiv = dynamic(() => import('@/components/motion/MotionDiv'), {
-  ssr: false,
-})
+import MotionDiv from '@/components/motion/MotionDiv'
 import StageProgressCard from '@/components/backpackCard/StageProgressCard'
 // import NoseSection from '@/components/backpack_up/nosesection'
 import SelectCard from '@/components/backpackCard/SelectCard'

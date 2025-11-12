@@ -1,8 +1,5 @@
 'use client'
-import dynamic from 'next/dynamic'
-const MotionDiv = dynamic(() => import('@/components/motion/MotionDiv'), {
-  ssr: false,
-})
+import MotionDiv from '@/components/motion/MotionDiv'
 import { useState } from 'react'
 
 import backImage from '@/public/backImage.png'

@@ -1,8 +1,5 @@
 'use client'
-import dynamic from 'next/dynamic'
-const MotionDiv = dynamic(() => import('@/components/motion/MotionDiv'), {
-  ssr: false,
-})
+import MotionDiv from '@/components/motion/MotionDiv'
 
 export default function BasePage() {
   return (
