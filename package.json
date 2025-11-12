@@ -13,7 +13,9 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
-    "prepare": "husky"
+    "prepare": "husky",
+    "analyze": "cross-env ANALYZE=true next build --turbopack",
+    "lhci": "lhci autorun"
   },
   "dependencies": {
     "@ant-design/nextjs-registry": "^1.1.0",
@@ -56,6 +58,9 @@
     "lint-staged": "^15.2.11",
     "prettier": "^3.6.2",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "@next/bundle-analyzer": "^14.0.0",
+    "@lhci/cli": "^0.12.0",
+    "cross-env": "^7.0.3"
   }
 }

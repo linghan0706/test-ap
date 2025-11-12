@@ -82,8 +82,7 @@ function CardBackground({
             display: 'block',
             transform: 'scaleX(-1)',
             willChange: 'opacity',
-            transition: 'height 0.3s ease, width 0.3s ease',
-            height: hPx,
+            height: '100%',
           }}
           xmlns="http://www.w3.org/2000/svg"
         >
@@ -165,8 +164,7 @@ function CardBackground({
             display: 'block',
             transform: 'scaleX(1)',
             willChange: 'opacity',
-            transition: 'height 0.3s ease, width 0.3s ease',
-            height: hPx,
+            height: '100%',
           }}
           xmlns="http://www.w3.org/2000/svg"
         >
@@ -282,34 +280,37 @@ export default function StorePage() {
     return { width, height }
   }
 
+  const measureSvgSize = () => {
+    const el = wrapperRef.current
+    if (!el) return
+    const grid = el.querySelector('[role="grid"]') as HTMLElement | null
+    const containerWidth = el.clientWidth || 361
+    let count = 0
+    if (grid) {
+      const children = Array.from(grid.children) as HTMLElement[]
+      count = children.filter(
+        c => c.getAttribute('aria-hidden') !== 'true'
+      ).length
+    } else {
+      count = tab === 'raffle' ? 1 : 4
+    }
+    const predicted = computeSvgSize(count, containerWidth)
+    const rect = el.getBoundingClientRect()
+    const height = Math.round(rect.height) || predicted.height
+    const width = Math.round(rect.width) || containerWidth
+    setSvgSize({ width, height })
+  }
+
   const recalc = useMemo(
     () =>
       debounce(() => {
-        const el = wrapperRef.current
-        if (!el) return
-        const grid = el.querySelector('[role="grid"]') as HTMLElement | null
-        const containerWidth = el.clientWidth || 361
-        let count = 0
-        if (grid) {
-          const children = Array.from(grid.children) as HTMLElement[]
-          count = children.filter(
-            c => c.getAttribute('aria-hidden') !== 'true'
-          ).length
-        } else {
-          // Fallback based on tab default items
-          count = tab === 'raffle' ? 1 : 4
-        }
-        const predicted = computeSvgSize(count, containerWidth)
-        // Use precise bounding rect to match the parent container's rendered box
-        const rect = el.getBoundingClientRect()
-        const height = Math.round(rect.height) || predicted.height
-        const width = Math.round(rect.width) || containerWidth
-        setSvgSize({ width, height })
+        measureSvgSize()
       }, 150),
     [tab]
   )
 
   useEffect(() => {
+    measureSvgSize()
     recalc()
     const el = wrapperRef.current
     if (!el) return

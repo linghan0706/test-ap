@@ -1,19 +1,6 @@
+'use client'
 import Avatar from 'antd/es/avatar/Avatar'
 import { AntDesignOutlined } from '@ant-design/icons'
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 const powerIcon = (
   <svg
@@ -47,7 +34,6 @@ const tonIcon = (
     />
   </svg>
 )
-
 
 export default function UserHeader() {
   return (

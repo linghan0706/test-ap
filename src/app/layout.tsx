@@ -7,20 +7,20 @@ import { ConfigProvider } from 'antd'
 import zhCN from 'antd/locale/zh_CN'
 import { MainLayout } from '@/components/layout'
 import { LoadingProvider } from '@/components/ui/LoadingProvider'
-
+import { WebVitals } from '@/components/analytics/WebVitals'
 
 // console.log("userData", Telegram.getTelegramUser());
 
-const inter = Inter({ subsets: ['latin'] })
-const jersey10 = Jersey_10({ 
+const inter = Inter({ subsets: ['latin'], display: 'swap', preload: true })
+const jersey10 = Jersey_10({
   subsets: ['latin'],
   weight: '400',
-  variable: '--font-jersey-10'
+  variable: '--font-jersey-10',
 })
-const jersey25 = Jersey_25({ 
+const jersey25 = Jersey_25({
   subsets: ['latin'],
   weight: '400',
-  variable: '--font-jersey-25'
+  variable: '--font-jersey-25',
 })
 
 export const metadata: Metadata = {
@@ -35,13 +35,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="zh-CN">
-      <body className={`${inter.className} ${jersey10.variable} ${jersey25.variable}`}>
+      <body
+        className={`${inter.className} ${jersey10.variable} ${jersey25.variable}`}
+      >
         <AntdRegistry>
           <ConfigProvider locale={zhCN}>
             <LoadingProvider>
-              <MainLayout>
-                {children}
-              </MainLayout>
+              <MainLayout>{children}</MainLayout>
+              <WebVitals />
             </LoadingProvider>
           </ConfigProvider>
         </AntdRegistry>

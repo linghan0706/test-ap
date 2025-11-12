@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+export const runtime = 'edge'
 
 // 上游后端基础地址（可通过环境变量覆盖）
 const UPSTREAM_BASE =

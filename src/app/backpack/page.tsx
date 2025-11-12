@@ -1,7 +1,10 @@
 'use client'
 
 import { useState } from 'react'
-import { motion } from 'framer-motion'
+import dynamic from 'next/dynamic'
+const MotionDiv = dynamic(() => import('@/components/motion/MotionDiv'), {
+  ssr: false,
+})
 import StageProgressCard from '@/components/backpackCard/StageProgressCard'
 // import NoseSection from '@/components/backpack_up/nosesection'
 import SelectCard from '@/components/backpackCard/SelectCard'
@@ -27,7 +30,7 @@ export default function BackpackPage() {
       </div>
       {/* 顶部标题 */}
       <div className="relative z-10 px-4 pt-6 max-w-[420px] mx-auto">
-        <motion.div
+        <MotionDiv
           className="text-center"
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
@@ -45,7 +48,7 @@ export default function BackpackPage() {
           >
             Check your props and collections
           </p>
-        </motion.div>
+        </MotionDiv>
       </div>
 
       {/* 内容区：卡片组件 */}
