@@ -54,20 +54,21 @@ const guidancePages: GuidancePageData[] = [
         lineHeight: '58px',
         color: '#FFFFFF',
         width: '298px',
-        height: '29px'
+        height: '29px',
       },
       subTitle: {
         fontFamily: "'Jersey 10', monospace",
         fontSize: '54px',
         lineHeight: '48px',
-        background: 'linear-gradient(90deg, #1EDDD6 0%, #34E37A 19.8%, #47F04F 36.43%, #81E73B 52.69%, #BAE25B 75.48%, #E377DA 94.23%), linear-gradient(156.71deg, #6B0AE9 2.78%, #6410B1 99.22%), #FFFFFF',
+        background:
+          'linear-gradient(90deg, #1EDDD6 0%, #34E37A 19.8%, #47F04F 36.43%, #81E73B 52.69%, #BAE25B 75.48%, #E377DA 94.23%), linear-gradient(156.71deg, #6B0AE9 2.78%, #6410B1 99.22%), #FFFFFF',
         backgroundClip: 'text',
         WebkitBackgroundClip: 'text',
         WebkitTextFillColor: 'transparent',
         width: '258px',
-        height: '48px'
-      }
-    }
+        height: '48px',
+      },
+    },
   },
   {
     id: 2,
@@ -83,7 +84,8 @@ const guidancePages: GuidancePageData[] = [
         display: 'flex',
         alignItems: 'center',
         textAlign: 'center',
-        background: 'linear-gradient(90deg, #1EDDD6 0%, #34E37A 19.8%, #47F04F 36.43%, #81E73B 52.69%, #BAE25B 75.48%, #E377DA 94.23%), #FFFFFF',
+        background:
+          'linear-gradient(90deg, #1EDDD6 0%, #34E37A 19.8%, #47F04F 36.43%, #81E73B 52.69%, #BAE25B 75.48%, #E377DA 94.23%), #FFFFFF',
         WebkitBackgroundClip: 'text',
         WebkitTextFillColor: 'transparent',
         backgroundClip: 'text',
@@ -92,9 +94,9 @@ const guidancePages: GuidancePageData[] = [
         height: '58px',
         flex: 'none',
         order: 0,
-        flexGrow: 0
-      }
-    }
+        flexGrow: 0,
+      },
+    },
   },
   {
     id: 3,
@@ -107,11 +109,12 @@ const guidancePages: GuidancePageData[] = [
         fontFamily: "'Jersey 10', monospace",
         fontSize: '54px',
         lineHeight: '58px',
-        background: 'linear-gradient(90deg, #1EDDD6 0%, #34E37A 19.8%, #47F04F 36.43%, #81E73B 52.69%, #BAE25B 75.48%, #E377DA 94.23%), linear-gradient(156.71deg, #6B0AE9 2.78%, #6410B1 99.22%), #FFFFFF',
+        background:
+          'linear-gradient(90deg, #1EDDD6 0%, #34E37A 19.8%, #47F04F 36.43%, #81E73B 52.69%, #BAE25B 75.48%, #E377DA 94.23%), linear-gradient(156.71deg, #6B0AE9 2.78%, #6410B1 99.22%), #FFFFFF',
         width: '246px',
-        height: '58px'
-      }
-    }
+        height: '58px',
+      },
+    },
   },
   {
     id: 4,
@@ -124,11 +127,12 @@ const guidancePages: GuidancePageData[] = [
         fontFamily: "'Jersey 25', monospace",
         fontSize: '54px',
         lineHeight: '54px',
-        background: 'linear-gradient(90deg, #1EDDD6 0%, #34E37A 19.8%, #47F04F 36.43%, #81E73B 52.69%, #BAE25B 75.48%, #E377DA 94.23%), linear-gradient(156.71deg, #6B0AE9 2.78%, #6410B1 99.22%), #FFFFFF',
+        background:
+          'linear-gradient(90deg, #1EDDD6 0%, #34E37A 19.8%, #47F04F 36.43%, #81E73B 52.69%, #BAE25B 75.48%, #E377DA 94.23%), linear-gradient(156.71deg, #6B0AE9 2.78%, #6410B1 99.22%), #FFFFFF',
         width: '143px',
-        height: '54px'
-      }
-    }
+        height: '54px',
+      },
+    },
   },
   {
     id: 5,
@@ -141,11 +145,12 @@ const guidancePages: GuidancePageData[] = [
         fontFamily: "'Jersey 10', monospace",
         fontSize: '54px',
         lineHeight: '58px',
-        background: 'linear-gradient(90deg, #1EDDD6 0%, #34E37A 19.8%, #47F04F 36.43%, #81E73B 52.69%, #BAE25B 75.48%, #E377DA 94.23%), linear-gradient(156.71deg, #6B0AE9 2.78%, #6410B1 99.22%), #FFFFFF',
+        background:
+          'linear-gradient(90deg, #1EDDD6 0%, #34E37A 19.8%, #47F04F 36.43%, #81E73B 52.69%, #BAE25B 75.48%, #E377DA 94.23%), linear-gradient(156.71deg, #6B0AE9 2.78%, #6410B1 99.22%), #FFFFFF',
         width: '307px',
-        height: '58px'
-      }
-    }
+        height: '58px',
+      },
+    },
   },
   {
     id: 6,
@@ -160,27 +165,33 @@ const guidancePages: GuidancePageData[] = [
         lineHeight: '58px',
         color: '#FFFFFF',
         width: '298px',
-        height: '29px'
+        height: '29px',
       },
       subTitle: {
         fontFamily: "'Jersey 10', monospace",
         fontSize: '54px',
         lineHeight: '48px',
-        background: 'linear-gradient(90deg, #1EDDD6 0%, #34E37A 19.8%, #47F04F 36.43%, #81E73B 52.69%, #BAE25B 75.48%, #E377DA 94.23%), linear-gradient(156.71deg, #6B0AE9 2.78%, #6410B1 99.22%), #FFFFFF',
+        background:
+          'linear-gradient(90deg, #1EDDD6 0%, #34E37A 19.8%, #47F04F 36.43%, #81E73B 52.69%, #BAE25B 75.48%, #E377DA 94.23%), linear-gradient(156.71deg, #6B0AE9 2.78%, #6410B1 99.22%), #FFFFFF',
         width: '255px',
-        height: '48px'
-      }
-    }
+        height: '48px',
+      },
+    },
   },
 ]
-{/**
-  *加载获取用户数据
-  *
-  *
-  */}
+{
+  /**
+   *加载获取用户数据
+   *
+   *
+   */
+}
 
 // 样式映射函数
-const getStyleForElement = (pageData: GuidancePageData, elementType: 'mainTitle' | 'subTitle') => {
+const getStyleForElement = (
+  pageData: GuidancePageData,
+  elementType: 'mainTitle' | 'subTitle'
+) => {
   const styleConfig = pageData.styles?.[elementType]
   if (!styleConfig) return {}
 
@@ -229,13 +240,16 @@ export default function Loading({ onComplete }: LoadingProps) {
   const mainIconRef = useRef<HTMLDivElement>(null)
   const titleAreaRef = useRef<HTMLDivElement>(null)
   const svgElementRef = useRef<SVGSVGElement>(null)
+  const touchStartXRef = useRef(0)
+  const touchStartYRef = useRef(0)
+  const touchStartTimeRef = useRef(0)
 
   // 使用布局管理器 - 目前仅用于ref管理
   useLayoutManager({
     containerRef,
     mainIconRef,
     titleAreaRef,
-    svgElementRef
+    svgElementRef,
   })
 
   // 确保从id为1的数据开始加载引导页内容
@@ -255,6 +269,16 @@ export default function Loading({ onComplete }: LoadingProps) {
     }
   }
 
+  const handlePrev = () => {
+    if (currentPage > 1 && !isTransitioning) {
+      setIsTransitioning(true)
+      setTimeout(() => {
+        setCurrentPage(prev => prev - 1)
+        setIsTransitioning(false)
+      }, 500)
+    }
+  }
+
   const handleSkip = () => {
     onComplete?.()
   }
@@ -271,11 +295,32 @@ export default function Loading({ onComplete }: LoadingProps) {
     }
   }
 
+  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    const t = e.touches[0]
+    touchStartXRef.current = t.clientX
+    touchStartYRef.current = t.clientY
+    touchStartTimeRef.current = Date.now()
+  }
+
+  const handleTouchEnd = (e: React.TouchEvent<HTMLDivElement>) => {
+    const t = e.changedTouches[0]
+    const dx = t.clientX - touchStartXRef.current
+    const dy = t.clientY - touchStartYRef.current
+    const dt = Date.now() - touchStartTimeRef.current
+    if (Math.abs(dx) > 40 && Math.abs(dy) < 60 && dt < 1000) {
+      if (dx < 0) handleNext()
+      else handlePrev()
+    }
+  }
+
   return (
-    <div 
+    <div
       ref={containerRef}
       className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 flex flex-col items-center justify-center relative overflow-hidden"
       data-layout-key="main-container"
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+      style={{ touchAction: 'pan-y' }}
     >
       {/* 背景装饰星星 */}
       <div className="absolute inset-0 overflow-hidden">
@@ -318,9 +363,10 @@ export default function Loading({ onComplete }: LoadingProps) {
             }}
           >
             {/* 主图标容器 - 只包含图标，确保横向居中 */}
-            <div className="relative w-80 h-64 flex items-center justify-center mx-auto">
+            <div className="relative w-80 h-64 flex items-center justify-center mx-auto ">
               <motion.div
                 className="relative"
+                style={{ marginTop: '28px' }}
                 animate={{
                   y: [0, -10, 0],
                 }}
@@ -336,67 +382,66 @@ export default function Loading({ onComplete }: LoadingProps) {
                   width={320}
                   height={240}
                   className="object-contain drop-shadow-2xl"
-                  style={{ 
+                  style={{
                     width: 'auto',
-                    height: 'auto'
+                    height: 'auto',
                   }}
                   priority
                 />
               </motion.div>
             </div>
 
-            {/* SVG椭圆底盘 - 独立定位，不跟随主图标动画，避免重叠 */}
-            <div className="relative w-full flex justify-center mt-2 mb-4">
-              <motion.svg 
-                ref={svgElementRef}
-                width="378" 
-                height="40" 
-                viewBox="0 0 378 40" 
-                fill="none" 
-                xmlns="http://www.w3.org/2000/svg" 
-                data-layout-key="element-2"
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ 
-                  duration: 0.3, 
-                  ease: 'easeOut',
-                  delay: 0.2 
-                }}
+            {/* 底盘容器（用于左右箭头定位） */}
+            <div
+              className="relative flex justify-center mt-3 mb-4 h-10"
+              style={{ width: '361px' }}
+            >
+              <motion.button
+                className="absolute left-3 top-1/2 -translate-y-1/2 z-20 opacity-80 hover:opacity-100 transition"
+                onClick={handlePrev}
+                disabled={currentPage === 1}
+                style={{ pointerEvents: currentPage === 1 ? 'none' : 'auto' }}
+                aria-label="Previous"
               >
-               <g filter="url(#filter0_f_3264_428)">
-                 <ellipse cx="189" cy="20" rx="169" ry="10" fill="#3C2466"/>
-               </g>
-               <defs>
-                 <filter id="filter0_f_3264_428" x="0" y="0" width="378" height="40" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
-                   <feFlood floodOpacity="0" result="BackgroundImageFix"/>
-                   <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
-                   <feGaussianBlur stdDeviation="10" result="effect1_foregroundBlur_3264_428"/>
-                 </filter>
-                </defs>
-              </motion.svg>
+                <Image
+                  src="/button/right.svg"
+                  alt="Previous"
+                  width={19}
+                  height={19}
+                  style={{ transform: 'scaleX(-1)' }}
+                />
+              </motion.button>
+
+              <motion.button
+                className="absolute right-3 top-1/2 -translate-y-1/2 z-20 opacity-80 hover:opacity-100 transition"
+                onClick={handleNext}
+                aria-label="Next"
+              >
+                <Image
+                  src="/button/right.svg"
+                  alt="Next"
+                  width={19}
+                  height={19}
+                />
+              </motion.button>
             </div>
 
-            {/* 底部光晕效果 - 独立于主图标动画 */}
-             <motion.div
-               className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 w-80 h-10 bg-purple-800/40 rounded-full blur-lg"
-               initial={{ opacity: 0, scale: 0.8 }}
-               animate={{
-                 scale: [1, 1.1, 1],
-                 opacity: [0.4, 0.6, 0.4],
-               }}
-               transition={{
-                 duration: 3,
-                 repeat: Infinity,
-                 ease: 'easeInOut',
-               }}
-             />
+            <Image
+              src="/button/footer.svg"
+              alt="Footer"
+              width={378}
+              height={40}
+              className="absolute -bottom-6 left-1/2 -translate-x-1/2"
+              style={{ width: 'auto', height: 'auto' }}
+              priority
+            />
           </motion.div>
         </AnimatePresence>
 
         {/* 标题区域 - 固定高度容器 */}
-        <div 
+        <div
           ref={titleAreaRef}
-          className="text-center mb-6 relative" 
+          className="text-center mb-6 relative"
           data-layout-key="element-1"
           style={{ height: '140px' }}
         >
@@ -410,7 +455,10 @@ export default function Loading({ onComplete }: LoadingProps) {
               transition={{ duration: 0.4, delay: 0.2 }}
             >
               {/* 主标题和副标题组合容器 - 固定高度 */}
-              <div className="flex flex-col justify-center items-center" style={{ height: '80px', marginBottom: '12px' }}>
+              <div
+                className="flex flex-col justify-center items-center"
+                style={{ height: '80px', marginBottom: '12px' }}
+              >
                 {/* 主标题 */}
                 {currentData.title && (
                   <motion.h1
@@ -420,7 +468,7 @@ export default function Loading({ onComplete }: LoadingProps) {
                     {currentData.title}
                   </motion.h1>
                 )}
-                
+
                 {/* 副标题 */}
                 {currentData.subtitle && (
                   <motion.h2
@@ -433,14 +481,17 @@ export default function Loading({ onComplete }: LoadingProps) {
               </div>
 
               {/* 描述文本容器 - 固定高度，支持换行 */}
-              <div className="flex justify-center items-start px-4" style={{ height: '48px', width: '285px' }}>
+              <div
+                className="flex justify-center items-start px-4"
+                style={{ height: '48px', width: '285px' }}
+              >
                 <motion.p
                   className="text-gray-300 text-sm leading-relaxed text-center break-words"
-                  style={{ 
+                  style={{
                     maxWidth: '285px',
                     wordWrap: 'break-word',
                     overflowWrap: 'break-word',
-                    hyphens: 'auto'
+                    hyphens: 'auto',
                   }}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
@@ -547,7 +598,7 @@ export default function Loading({ onComplete }: LoadingProps) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.8 }}
         >
-          {/* id：6，显示Get in按钮 */}
+          {/* id：6，显示Enter按钮 */}
           {currentData.id === 6 ? (
             <motion.button
               className="text-white font-medium text-sm transition-all duration-300"
@@ -563,42 +614,19 @@ export default function Loading({ onComplete }: LoadingProps) {
                 gap: '4px',
                 width: '141px',
                 height: '30px',
-                background: 'linear-gradient(156.71deg, #6B0AE9 2.78%, #6410B1 99.22%)',
+                background:
+                  'linear-gradient(156.71deg, #6B0AE9 2.78%, #6410B1 99.22%)',
                 borderRadius: '8px',
                 flex: 'none',
                 order: 0,
                 flexGrow: 0,
                 border: 'none',
-                cursor: 'pointer'
+                cursor: 'pointer',
               }}
             >
-              Get in
+              Enter
             </motion.button>
-          ) : (
-            <div className="flex justify-center space-x-2 w-full">
-              {/* Skip 按钮 */}
-              <motion.button
-                className="flex-1 py-2 px-4 bg-white rounded-lg text-black font-medium text-sm hover:bg-gray-100 transition-all duration-300"
-                onClick={handleSkip}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                Skip
-              </motion.button>
-
-              {/* Next Step 按钮 */}
-              <motion.button
-                className="flex-1 py-2 px-4 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg text-white font-medium text-sm hover:from-purple-700 hover:to-blue-700 transition-all duration-300 shadow-lg"
-                onClick={handleNext}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                {currentData.id === 6
-                  ? 'Get Started'
-                  : 'Next Step'}
-              </motion.button>
-            </div>
-          )}
+          ) : null}
         </motion.div>
       </div>
 
@@ -625,38 +653,6 @@ export default function Loading({ onComplete }: LoadingProps) {
           />
         ))}
       </div>
-
-      {/* 侧边装饰元素 */}
-      <motion.div
-        className="absolute left-4 top-1/2 transform -translate-y-1/2 text-2xl opacity-30"
-        animate={{
-          x: [0, 10, 0],
-          rotate: [0, 5, 0],
-        }}
-        transition={{
-          duration: 6,
-          repeat: Infinity,
-          ease: 'easeInOut',
-        }}
-      >
-        🚀
-      </motion.div>
-
-      <motion.div
-        className="absolute right-4 top-1/3 text-xl opacity-30"
-        animate={{
-          x: [0, -10, 0],
-          rotate: [0, -5, 0],
-        }}
-        transition={{
-          duration: 8,
-          repeat: Infinity,
-          ease: 'easeInOut',
-          delay: 2,
-        }}
-      >
-        ⭐
-      </motion.div>
 
       <style jsx>{`
         @keyframes float {
