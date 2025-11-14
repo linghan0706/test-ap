@@ -1,14 +1,102 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import MotionDiv from '@/components/motion/MotionDiv'
 import StageProgressCard from '@/components/backpackCard/StageProgressCard'
 // import NoseSection from '@/components/backpack_up/nosesection'
-import SelectCard from '@/components/backpackCard/SelectCard'
+import SelectCard, {
+  BackpackItem,
+  BackpackCategory,
+} from '@/components/backpackCard/SelectCard'
+import NoseSection from '@/components/backpack_up/Nosesection'
+import GiftProps from '@/components/backpack_up/GiftProps'
+import NoseSectionResult from '@/components/backpack_up/NosesectionResult'
+import { useBackpackModalStore } from '@/stores/backpackModalStore'
 import backImage from '@/public/backImage.png'
 
 export default function BackpackPage() {
-  const [selectedCategory, setSelectedCategory] = useState<string>('all')
+  const [selectedCategory, setSelectedCategory] =
+    useState<BackpackCategory>('all')
+  const [items, setItems] = useState<BackpackItem[]>([])
+  const [loading, setLoading] = useState<boolean>(false)
+  const [error, setError] = useState<string | null>(null)
+  {
+    /** 筛选器*/
+  }
+  const options: { label: string; value: BackpackCategory }[] = [
+    { label: 'All', value: 'all' },
+    { label: 'Stage', value: 'stage' },
+    { label: 'Collector', value: 'collector' },
+    { label: 'Other', value: 'other' },
+  ]
+  {
+    /**背包道具 */
+  }
+  const buildMockItems = (): BackpackItem[] => {
+    return [
+      {
+        name: 'Nose Section',
+        quantity: 1,
+        iconPath: '/backpack/part/nose_section.svg',
+        category: 'stage',
+      },
+      {
+        name: 'Landing Gear',
+        quantity: 1,
+        iconPath: '/backpack/part/landing_gear.svg',
+        category: 'stage',
+      },
+      {
+        name: 'Horizontal Stabilizer',
+        quantity: 1,
+        iconPath: '/backpack/part/horizontal_stabilizer.svg',
+        category: 'stage',
+      },
+      {
+        name: 'Vertical Stabilizer',
+        quantity: 1,
+        iconPath: '/backpack/part/vertical_stabilizer.svg',
+        category: 'stage',
+      },
+      {
+        name: 'Wings',
+        quantity: 1,
+        iconPath: '/backpack/part/wings.svg',
+        category: 'stage',
+      },
+      {
+        name: 'Propulsion System',
+        quantity: 1,
+        iconPath: '/backpack/part/propulsion_system.svg',
+        category: 'other',
+      },
+      {
+        name: 'Main Body',
+        quantity: 1,
+        iconPath: '/backpack/part/main_body.svg',
+        category: 'other',
+      },
+    ]
+  }
+
+  const loadItems = async () => {
+    try {
+      setLoading(true)
+      setError(null)
+      await new Promise(r => setTimeout(r, 300))
+      setItems(buildMockItems())
+    } catch (e) {
+      setError('Failed to load items')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    loadItems()
+  }, [])
+  const { mode, item, result, gift, close, openGift, openResult, openDetails } =
+    useBackpackModalStore()
   return (
     <div className="min-h-screen relative overflow-hidden pb-20 pt-10 sm:pt-14 mt-[20px]">
       <div
@@ -55,9 +143,53 @@ export default function BackpackPage() {
           lockedPositions={[{ left: 40, top: 320 }]}
           data-testid="stage-progress-card"
         />
-        {/* Nose Section 详情卡片预览 */}
-        {/* <NoseSection /> */}
-        <SelectCard value={selectedCategory} onChange={setSelectedCategory} />
+        <SelectCard
+          options={options}
+          value={selectedCategory}
+          onChange={setSelectedCategory}
+          items={items}
+          loading={loading}
+          error={error}
+          onRetry={loadItems}
+        />
+        {mode !== 'none' && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center">
+            <div className="absolute inset-0 bg-black/50" onClick={close} />
+            <div className="relative z-10">
+              {mode === 'details' && (
+                <NoseSection
+                  onGive={() => openGift({})}
+                  onSell={() => openResult({ status: 'success' })}
+                  onUse={() => openResult({ status: 'success' })}
+                />
+              )}
+              {mode === 'gift' && (
+                <GiftProps
+                  visible
+                  onCancel={() => (item ? openDetails(item) : close())}
+                  onConfirm={({ username, amount }) => {
+                    openResult({
+                      status: 'success',
+                      description: `${username} X${amount}`,
+                    })
+                  }}
+                />
+              )}
+              {mode === 'result' && result && (
+                <NoseSectionResult
+                  open
+                  status={result.status}
+                  title={result.title}
+                  description={result.description}
+                  imageSrc={result.imageSrc}
+                  onConfirm={close}
+                  onContact={close}
+                  onClose={close}
+                />
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )
