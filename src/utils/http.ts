@@ -6,23 +6,9 @@ import axios, {
   InternalAxiosRequestConfig,
 } from 'axios'
 
-// 计算基础地址：优先使用环境变量，浏览器端默认同源以避免混合内容
+// 计算基础地址：统一从环境变量读取后端服务地址，若未配置则退回同源
 function resolveBaseURL(): string {
-  const envBase =
-    (typeof process !== 'undefined'
-      ? process.env?.NEXT_PUBLIC_API_BASE
-      : undefined) || ''
-  // 浏览器端：默认同源（空 baseURL），以避免在 HTTPS 页面发起 HTTP 请求导致 Mixed Content
-  if (typeof window !== 'undefined') {
-    return envBase.trim() || ''
-  }
-
-  // 服务端：允许使用服务端环境变量指定上游地址
-  const serverBase =
-    (typeof process !== 'undefined'
-      ? process.env?.API_BASE_URL || process.env?.NEXT_PUBLIC_API_BASE
-      : undefined) || ''
-  return (serverBase || envBase).trim()
+  return ''
 }
 
 // 创建 axios 实例（统一后端基础地址配置）

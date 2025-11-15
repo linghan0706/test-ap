@@ -1,7 +1,8 @@
-"use client"
+'use client'
 
 import React from 'react'
 import Image from 'next/image'
+import { useBackpackModalStore } from '@/stores/backpackModalStore'
 
 type NoseSectionProps = {
   className?: string
@@ -10,7 +11,15 @@ type NoseSectionProps = {
   onUse?: () => void
 }
 
-const NoseSection: React.FC<NoseSectionProps> = ({ className, onGive, onSell, onUse }) => {
+const NoseSection: React.FC<NoseSectionProps> = ({
+  className,
+  onGive,
+  onSell,
+  onUse,
+}) => {
+  const { item } = useBackpackModalStore()
+  const title = item?.name ?? 'Item'
+  const imageSrc = item?.iconPath ?? '/backpack/StageProgress.svg'
   return (
     <section
       className={[
@@ -18,13 +27,11 @@ const NoseSection: React.FC<NoseSectionProps> = ({ className, onGive, onSell, on
         'shadow-[0_8px_24px_rgba(0,0,0,0.35)]',
         'border border-[#6B0AE9]',
         'flex flex-col items-center',
-        // 星空背景：深色渐变 + 微网格星点
         'bg-[#151633]',
         className ?? '',
       ].join(' ')}
-      aria-label="Nose Section"
+      aria-label={title}
     >
-      {/* 背景层：使用 taskupback.svg */}
       <div
         aria-hidden
         className="absolute inset-0 rounded-[12px]"
@@ -35,14 +42,10 @@ const NoseSection: React.FC<NoseSectionProps> = ({ className, onGive, onSell, on
           backgroundPosition: 'center',
         }}
       />
-
-      {/* 星点轻纹理覆盖 */}
-
-
-      {/* 顶部标题与帮助按钮 */}
       <div className="relative z-10 w-full flex items-center justify-center pt-4 pb-1">
-        <h2 className="font-jersey-10 text-white text-[28px] leading-[22px]">Nose Section</h2>
-        {/* 右上角问号按钮 */}
+        <h2 className="font-jersey-10 text-white text-[28px] leading-[22px]">
+          {title}
+        </h2>
         <button
           type="button"
           title="help"
@@ -58,20 +61,16 @@ const NoseSection: React.FC<NoseSectionProps> = ({ className, onGive, onSell, on
           />
         </button>
       </div>
-
-      {/* 中心展示图 */}
       <div className="relative z-10 flex-1 w-full flex items-center justify-center">
         <Image
-          src="/backpack/StageProgress.svg"
-          alt="Nose section"
+          src={imageSrc}
+          alt={title}
           width={157}
           height={157}
           className="object-contain drop-shadow-[0_6px_18px_rgba(0,0,0,0.35)]"
           priority
         />
       </div>
-
-      {/* 底部操作按钮组 */}
       <div className="relative z-10 w-full px-4 pb-4 flex items-center justify-between gap-3">
         <button
           type="button"
@@ -84,7 +83,6 @@ const NoseSection: React.FC<NoseSectionProps> = ({ className, onGive, onSell, on
         >
           Give
         </button>
-
         <button
           type="button"
           onClick={onSell}
@@ -98,7 +96,6 @@ const NoseSection: React.FC<NoseSectionProps> = ({ className, onGive, onSell, on
         >
           Sell
         </button>
-
         <button
           type="button"
           onClick={onUse}
