@@ -1,4 +1,4 @@
-import { httpUtils } from './http'
+import http, { httpUtils } from './http'
 import { getFormattedInitData } from '../telegramWebApp/telegrambot'
 
 // 定义 Telegram 登录相关的类型
@@ -75,13 +75,14 @@ export async function telegramLogin(): Promise<TelegramLoginResponse | LoginErro
       initData: initDataResult.initData
     }
     console.log('Sending Telegram login request...')
-    console.log('InitData:', initDataResult.initData)
 
     // 3. 发送 POST 请求到后端
-    const response = await httpUtils.post<TelegramLoginResponse>(
-      '/api/auth/login',
-      requestData
-    )
+    const USE_INITDATA_HEADER = false
+    const response = USE_INITDATA_HEADER
+      ? await http.post<TelegramLoginResponse>('/api/auth/login', requestData, {
+          headers: { 'X-Telegram-Init-Data': initDataResult.initData },
+        })
+      : await httpUtils.post<TelegramLoginResponse>('/api/auth/login', requestData)
 
     // 4. 验证响应数据
     if (!response || typeof response !== 'object') {

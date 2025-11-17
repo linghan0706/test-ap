@@ -28,7 +28,9 @@ http.interceptors.request.use(
 
     // 添加认证 token（如果存在）
     const token = localStorage.getItem('telegram_auth_token') || localStorage.getItem('token')
-    if (token && config.headers) {
+    const url = config.url || ''
+    const isLogin = url.startsWith('/api/auth/login')
+    if (token && config.headers && !isLogin) {
       config.headers.Authorization = `Bearer ${token}`
     }
 
@@ -91,7 +93,7 @@ http.interceptors.response.use(
 
     if (error.response) {
       // 服务器响应了错误状态码
-      const { status, data } = error.response
+      const { status, data, headers } = error.response as AxiosResponse
 
       switch (status) {
         case 400:
@@ -101,6 +103,7 @@ http.interceptors.response.use(
           errorMessage = 'Unauthorized, please login again'
           // 清除本地 token
           localStorage.removeItem('token')
+          localStorage.removeItem('telegram_auth_token')
           // 可以在这里跳转到登录页
           // window.location.href = '/login'
           break
@@ -130,6 +133,10 @@ http.interceptors.response.use(
         } else if ('error' in data && data.error) {
           errorMessage = data.error as string
         }
+      }
+      const upstream = headers && (headers['x-proxy-upstream'] as string | undefined)
+      if (upstream) {
+        console.error('Upstream:', upstream)
       }
     } else if (error.request) {
       // 请求已发出但没有收到响应

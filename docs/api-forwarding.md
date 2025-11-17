@@ -34,6 +34,7 @@
   - 登录成功后保存令牌：`141:159:src/utils/api.ts`
 
 ## 环境变量与部署要求
+- 配置文件路径：`c:\Users\lingh\Desktop\test-front\test-ap\.env`
 - `.env` 必须设置 `API_BASE_URL`（Production 环境作用域），示例：
   - `API_BASE_URL=http://38.165.34.30:8080`
 - 部署需重新构建以应用 `nodejs` 运行时与代理改动。

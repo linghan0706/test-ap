@@ -44,7 +44,7 @@ yarn install
 
 ### 环境配置
 
-在项目根目录编辑 `.env` 文件，填入必要的配置：
+在项目根目录编辑 `.env` 文件（Windows 本机路径：`c:\Users\lingh\Desktop\test-front\test-ap\.env`），填入必要的配置：
 
 ```env
 # TON API 配置

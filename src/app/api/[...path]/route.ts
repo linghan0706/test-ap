@@ -15,6 +15,14 @@ async function proxy(req: Request) {
 
   const headers = new Headers(req.headers)
   headers.delete('host')
+  const originalHost = req.headers.get('host') || ''
+  const proto = u.protocol === 'https:' ? 'https' : 'http'
+  if (originalHost) headers.set('x-forwarded-host', originalHost)
+  headers.set('x-forwarded-proto', proto)
+  const xf = req.headers.get('x-forwarded-for')
+  const xr = req.headers.get('x-real-ip')
+  if (xf) headers.set('x-forwarded-for', xf)
+  if (xr) headers.set('x-real-ip', xr)
   const path = u.pathname
   const requiresAuth =
     path.startsWith('/api/store') || path === '/api/auth/logout'
@@ -36,7 +44,19 @@ async function proxy(req: Request) {
   const contentType = res.headers.get('content-type') || ''
   if (contentType.includes('application/json')) {
     const data: unknown = await res.json()
-    const out = NextResponse.json(data, { status: res.status })
+    const needsNormalize = u.pathname === '/api/auth/login'
+    const isObj = data && typeof data === 'object'
+    const hasStdShape = isObj && ('code' in (data as Record<string, unknown>) || 'success' in (data as Record<string, unknown>))
+    const normalized = needsNormalize && !hasStdShape
+      ? {
+          code: res.status,
+          success: res.status >= 200 && res.status < 300,
+          data,
+          message: '',
+          timestamp: Date.now(),
+        }
+      : data
+    const out = NextResponse.json(normalized, { status: res.status })
     out.headers.set('x-proxy-upstream', upstream)
     out.headers.set('x-proxy-runtime', 'nodejs')
     return out
