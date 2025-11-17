@@ -44,13 +44,7 @@ yarn install
 
 ### 环境配置
 
-复制环境变量文件并配置：
-
-```bash
-cp env.example .env.local
-```
-
-编辑 `.env.local` 文件，填入必要的配置：
+在项目根目录编辑 `.env` 文件，填入必要的配置：
 
 ```env
 # TON API 配置
@@ -62,6 +56,10 @@ NEXT_PUBLIC_APP_NAME=Nova Explorer Bot
 
 # 网络配置
 NEXT_PUBLIC_NETWORK=mainnet
+
+# 统一后端基础地址（代理与浏览器端统一使用）
+API_BASE_URL=http://localhost:8081
+NEXT_PUBLIC_BACKEND_URL=http://localhost:8081
 ```
 
 ### 启动开发服务器
@@ -91,26 +89,61 @@ yarn dev
 
 ```
 src/
-├── app/                  # 页面路由（App Router）
-│   ├── home/             # 个人首页
-│   ├── store/            # 商店页面
-│   ├── task/             # 任务页面
-│   ├── backpack/         # 背包页面
-│   ├── base/             # 基础页面
-│   └── layout.tsx        # 全局布局
-├── components/          # UI 组件
-│   ├── layout/          # 布局组件（如底部导航）
-│   ├── ui/              # 通用 UI（加载、错误边界）
-│   └── WalletConnect.tsx # 钱包连接组件
-├── features/            # 功能模块
-│   ├── explorer/        # 区块链浏览器功能
-│   └── wallet/          # 钱包相关功能（含 hooks）
-├── lib/                 # 工具类库
-│   ├── ton-client.ts    # TON 客户端封装
-│   └── ton-config.ts    # TON 配置文件
-├── services/            # API 服务层
-├── stores/              # Zustand 状态管理
-├── types/               # TypeScript 类型定义
-├── utils/               # 工具函数（格式化、验证等）
-└── styles/              # 全局样式（globals.css）
+├── app/                         # 页面路由（App Router）
+│   ├── api/                     # 前端通用代理（统一隐藏后端路径）
+│   │   └── [...path]/route.ts   # 统一代理转发 /api/*
+│   ├── home/                    # 个人首页
+│   ├── store/                   # 商店页面
+│   ├── task/                    # 任务页面
+│   ├── backpack/                # 背包页面
+│   ├── base/                    # 基础页面
+│   └── layout.tsx               # 全局布局
+├── components/                 # UI 组件
+│   ├── backpackCard/           # 背包卡片组件
+│   └── backpack_up/            # 背包弹窗组件
+├── stores/                     # Zustand 状态管理
+├── types/                      # TypeScript 类型定义
+├── utils/                      # 工具与接口模块
+│   ├── http.ts                 # Axios 实例（统一 Token 与响应格式）
+│   └── api/                    # 按模块划分的接口文件
+│       └── store/api.ts        # 商店接口集合
+└── styles/                     # 全局样式（globals.css）
 ```
+
+## 接口调用规范
+
+- 统一通过同源路径 `'/api/*'` 调用后端，通用代理会转发至 `.env` 配置的 `API_BASE_URL`（未设置时回退 `NEXT_PUBLIC_BACKEND_URL`）。
+- 仅在 `src/utils/api/**` 下按模块维护接口方法，写相对路径，例如：
+  - `http.get('/api/store/items')`
+  - `http.post('/api/store/purchase/submit', payload)`
+- 认证：`src/utils/http.ts` 请求拦截器自动注入 `Authorization: Bearer <token>`（从 `localStorage.token` 读取）。
+- 响应：统一处理 `{ code, message, data, success, timestamp }` 格式，返回前端友好结构。
+
+### 示例（商店接口）
+
+```
+import { fetchStoreItems, fetchStoreOrders, submitStorePurchase, submitStoreExchange } from '@/utils/api/store/api'
+
+// 获取物品列表
+const items = await fetchStoreItems()
+
+// 获取订单列表
+const orders = await fetchStoreOrders()
+
+// 根据订单号查询订单
+const order = await fetchStoreOrderByNumber('ORD202401010001')
+
+// 提交购买
+await submitStorePurchase({ itemId: 1, assetId: 3, quantity: 1, paymentMethod: 'TON', transactionHash: '0x...', walletAddress: '0x...', rawTransactionData: {} })
+
+// 资产兑换
+await submitStoreExchange({ sourceAssetId: 1, targetAssetId: 3, sourceAmount: 100 })
+```
+
+## 开发规范提示
+
+- 模块导入大小写必须与文件名完全一致，避免在大小写敏感环境下构建失败。
+- 接口仅在 `utils/api/**` 中新增；无需在 `app/api/**` 为每个接口单独建转发文件。
+- 变更 `.env` 后需重启开发服务器使配置生效。
+
+# test-ap
