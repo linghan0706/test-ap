@@ -13,9 +13,8 @@ function resolveBaseURL(): string {
 
 // 创建 axios 实例（统一后端基础地址配置）
 const http: AxiosInstance = axios.create({
-  // 统一设置后端基础地址（同源优先，避免 Mixed Content）
-  baseURL: resolveBaseURL()||'http://38.165.34.30:8080',
-  timeout: 10000, // 10秒超时
+  baseURL: resolveBaseURL() || '',
+  timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
   },
