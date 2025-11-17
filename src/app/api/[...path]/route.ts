@@ -4,11 +4,7 @@ export const runtime = 'edge'
 
 async function proxy(req: Request) {
   const u = new URL(req.url)
-  const base = (
-    process.env.API_BASE_URL ||
-    process.env.NEXT_PUBLIC_BACKEND_URL ||
-    ''
-  ).replace(/\/$/, '')
+  const base = (process.env.API_BASE_URL || '').replace(/\/$/, '')
   const upstream = `${base}${u.pathname}${u.search}`
 
   const headers = new Headers(req.headers)
