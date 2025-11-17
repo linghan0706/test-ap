@@ -77,7 +77,7 @@ export async function telegramLogin(): Promise<TelegramLoginResponse | LoginErro
     console.log('Sending Telegram login request...')
 
     // 3. 发送 POST 请求到后端
-    const USE_INITDATA_HEADER = false
+    const USE_INITDATA_HEADER = true
     const response = USE_INITDATA_HEADER
       ? await http.post<TelegramLoginResponse>('/api/auth/login', requestData, {
           headers: { 'X-Telegram-Init-Data': initDataResult.initData },

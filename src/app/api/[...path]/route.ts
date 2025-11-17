@@ -15,6 +15,8 @@ async function proxy(req: Request) {
 
   const headers = new Headers(req.headers)
   headers.delete('host')
+  headers.delete('origin')
+  headers.delete('referer')
   const originalHost = req.headers.get('host') || ''
   const proto = u.protocol === 'https:' ? 'https' : 'http'
   if (originalHost) headers.set('x-forwarded-host', originalHost)
