@@ -1,10 +1,16 @@
 import { NextResponse } from 'next/server'
 
-export const runtime = 'edge'
+export const runtime = 'nodejs'
 
 async function proxy(req: Request) {
   const u = new URL(req.url)
   const base = (process.env.API_BASE_URL || '').replace(/\/$/, '')
+  if (!base) {
+    return NextResponse.json(
+      { success: false, message: 'API_BASE_URL not set', timestamp: Date.now() },
+      { status: 500 }
+    )
+  }
   const upstream = `${base}${u.pathname}${u.search}`
 
   const headers = new Headers(req.headers)

@@ -10,7 +10,7 @@ import axios, {
 function resolveBaseURL(): string {
   return ''
 }
-请统一变量名。
+
 // 创建 axios 实例（统一后端基础地址配置）
 const http: AxiosInstance = axios.create({
   baseURL: resolveBaseURL() || '',
