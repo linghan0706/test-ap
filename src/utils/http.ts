@@ -27,7 +27,7 @@ http.interceptors.request.use(
     console.log('Sending request:', config.method?.toUpperCase(), config.url)
 
     // 添加认证 token（如果存在）
-    const token = localStorage.getItem('token')
+    const token = localStorage.getItem('telegram_auth_token') || localStorage.getItem('token')
     if (token && config.headers) {
       config.headers.Authorization = `Bearer ${token}`
     }

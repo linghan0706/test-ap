@@ -15,6 +15,18 @@ async function proxy(req: Request) {
 
   const headers = new Headers(req.headers)
   headers.delete('host')
+  const path = u.pathname
+  const requiresAuth =
+    path.startsWith('/api/store') || path === '/api/auth/logout'
+  if (requiresAuth) {
+    const auth = headers.get('authorization')
+    if (!auth) {
+      return NextResponse.json(
+        { success: false, message: 'Unauthorized', timestamp: Date.now() },
+        { status: 401 }
+      )
+    }
+  }
 
   const bodyText = ['GET', 'HEAD'].includes(req.method)
     ? undefined

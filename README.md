@@ -57,9 +57,8 @@ NEXT_PUBLIC_APP_NAME=Nova Explorer Bot
 # 网络配置
 NEXT_PUBLIC_NETWORK=mainnet
 
-# 统一后端基础地址（代理与浏览器端统一使用）
+# 统一后端基础地址（代理仅使用 .env 的 API_BASE_URL）
 API_BASE_URL=http://localhost:8081
-NEXT_PUBLIC_BACKEND_URL=http://localhost:8081
 ```
 
 ### 启动开发服务器
@@ -112,12 +111,15 @@ src/
 
 ## 接口调用规范
 
-- 统一通过同源路径 `'/api/*'` 调用后端，通用代理会转发至 `.env` 配置的 `API_BASE_URL`（未设置时回退 `NEXT_PUBLIC_BACKEND_URL`）。
+- 统一通过同源路径 `'/api/*'` 调用后端，通用代理会转发至 `.env` 配置的 `API_BASE_URL`（未设置时返回 500 明确提示）。
+- 代理运行时为 `nodejs`，避免 Edge 环境对直连 IP 的限制；`/api/vitals` 保持 `edge`。
 - 仅在 `src/utils/api/**` 下按模块维护接口方法，写相对路径，例如：
   - `http.get('/api/store/items')`
   - `http.post('/api/store/purchase/submit', payload)`
-- 认证：`src/utils/http.ts` 请求拦截器自动注入 `Authorization: Bearer <token>`（从 `localStorage.token` 读取）。
+- 认证：`src/utils/http.ts` 请求拦截器自动注入 `Authorization: Bearer <token>`（优先从 `localStorage.telegram_auth_token` 读取，兼容 `token`）。
+- 统一鉴权：代理层对 `'/api/store/*'` 与 `'/api/auth/logout'` 缺少 `Authorization` 的请求返回 401。
 - 响应：统一处理 `{ code, message, data, success, timestamp }` 格式，返回前端友好结构。
+- 诊断头：代理响应附带 `x-proxy-runtime` 与 `x-proxy-upstream`，便于在 Telegram 环境验证运行时与上游地址。
 
 ### 示例（商店接口）
 
