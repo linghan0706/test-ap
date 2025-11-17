@@ -24,10 +24,16 @@ async function proxy(req: Request) {
   const contentType = res.headers.get('content-type') || ''
   if (contentType.includes('application/json')) {
     const data: unknown = await res.json()
-    return NextResponse.json(data, { status: res.status })
+    const out = NextResponse.json(data, { status: res.status })
+    out.headers.set('x-proxy-upstream', upstream)
+    out.headers.set('x-proxy-runtime', 'nodejs')
+    return out
   }
   const text = await res.text()
-  return new NextResponse(text, { status: res.status })
+  const out = new NextResponse(text, { status: res.status })
+  out.headers.set('x-proxy-upstream', upstream)
+  out.headers.set('x-proxy-runtime', 'nodejs')
+  return out
 }
 
 export async function GET(req: Request) {
