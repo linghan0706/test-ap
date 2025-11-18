@@ -13,12 +13,9 @@ async function proxy(req: Request, params: RouteParams) {
     )
   }
 
-  const segments = params.path || []
-  const trimmed = segments[0] === 'proxy' ? segments.slice(1) : segments
-  const backendPath = `/api/${trimmed.join('/')}`
-
   const u = new URL(req.url)
-  const upstream = `${base}${backendPath}${u.search}`
+  const path = u.pathname.replace(/^\/api\/proxy/, '/api')
+  const upstream = `${base}${path}${u.search}`
 
   const headers = new Headers(req.headers)
   headers.delete('host')
