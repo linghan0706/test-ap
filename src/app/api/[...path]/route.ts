@@ -43,6 +43,10 @@ async function proxy(req: Request, params: RouteParams) {
   const contentType = res.headers.get('content-type') || ''
   const proxyHeaders = new Headers(res.headers)
   proxyHeaders.set('x-proxy-upstream', upstream)
+  proxyHeaders.set(
+    'x-proxy-debug',
+    JSON.stringify({ base, pathname: u.pathname, computed_upstream: upstream })
+  )
 
   if (contentType.includes('application/json')) {
     const data = await res.json()
