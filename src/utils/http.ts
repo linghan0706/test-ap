@@ -161,8 +161,12 @@ export const httpUtils = {
   },
 
   // POST 请求
-  post<T = unknown>(url: string, data?: unknown): Promise<T> {
-    return http.post(url, data)
+  post<T = unknown>(
+    url: string,
+    data?: unknown,
+    config?: AxiosRequestConfig
+  ): Promise<T> {
+    return http.post(url, data, config)
   },
 
   // PUT 请求
