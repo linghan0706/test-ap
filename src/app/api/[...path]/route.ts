@@ -1,10 +1,10 @@
-import { NextResponse } from 'next/server'
+import { NextResponse, NextRequest } from 'next/server'
 
 export const runtime = 'nodejs'   // Vercel 使用 Node.js Runtime
 
-type RouteContext = { params: { path: string[] } }
+type RouteParams = { path: string[] }
 
-async function proxy(req: Request, params: { path: string[] }) {
+async function proxy(req: Request, params: RouteParams) {
   const base = process.env.API_BASE_URL?.replace(/\/$/, '')
   if (!base) {
     return NextResponse.json(
@@ -61,20 +61,25 @@ async function proxy(req: Request, params: { path: string[] }) {
 }
 
 // 支持所有方法
-export async function GET(req: Request, ctx: RouteContext) {
-  return proxy(req, ctx.params)
+export async function GET(req: NextRequest, ctx: { params: Promise<RouteParams> }) {
+  const params = await ctx.params
+  return proxy(req, params)
 }
-export async function POST(req: Request, ctx: RouteContext) {
-  return proxy(req, ctx.params)
+export async function POST(req: NextRequest, ctx: { params: Promise<RouteParams> }) {
+  const params = await ctx.params
+  return proxy(req, params)
 }
-export async function PUT(req: Request, ctx: RouteContext) {
-  return proxy(req, ctx.params)
+export async function PUT(req: NextRequest, ctx: { params: Promise<RouteParams> }) {
+  const params = await ctx.params
+  return proxy(req, params)
 }
-export async function PATCH(req: Request, ctx: RouteContext) {
-  return proxy(req, ctx.params)
+export async function PATCH(req: NextRequest, ctx: { params: Promise<RouteParams> }) {
+  const params = await ctx.params
+  return proxy(req, params)
 }
-export async function DELETE(req: Request, ctx: RouteContext) {
-  return proxy(req, ctx.params)
+export async function DELETE(req: NextRequest, ctx: { params: Promise<RouteParams> }) {
+  const params = await ctx.params
+  return proxy(req, params)
 }
 export async function OPTIONS() {
   return NextResponse.json({}, { status: 200 })
