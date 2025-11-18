@@ -43,7 +43,7 @@ function isAuthExcluded(url: string): boolean {
 }
 
 function shouldAttachAuth(config: RequestConfigWithAuth): boolean {
-  if ((config as any).skipAuth === true) return false
+  if (config.skipAuth === true) return false
   const url = config.url || ''
   if (isAuthExcluded(url)) return false
   return true
