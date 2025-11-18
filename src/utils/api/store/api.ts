@@ -98,7 +98,7 @@ export type ExchangeRequest = {
 export async function fetchStoreCenter(
   token?: string
 ): Promise<ApiSuccess<StoreCenterData>> {
-  const res = await http.get('/api/store/center', {
+  const res = await http.get('/store/center', {
     headers: token ? { Authorization: `Bearer ${token}` } : undefined,
   })
   // 先转成 unknown，再断言为 ApiSuccess<StoreCenterData>
@@ -111,7 +111,7 @@ export async function fetchStoreCenter(
 export async function fetchStoreOrders(
   token?: string
 ): Promise<ApiSuccess<StoreOrder[]>> {
-  const res = await http.get('/api/store/orders', {
+  const res = await http.get('/store/orders', {
     headers: token ? { Authorization: `Bearer ${token}` } : undefined,
   })
   return res.data as unknown as ApiSuccess<StoreOrder[]>
@@ -124,7 +124,7 @@ export async function fetchStoreOrderByNumber(
   token?: string
 ): Promise<ApiSuccess<StoreOrder>> {
   const res = await http.get(
-    `/api/store/orders/${encodeURIComponent(orderNumber)}`,
+    `/store/orders/${encodeURIComponent(orderNumber)}`,
     {
       headers: token ? { Authorization: `Bearer ${token}` } : undefined,
     }
@@ -137,7 +137,7 @@ export async function fetchStoreOrderByNumber(
 export async function fetchStoreItems(
   token?: string
 ): Promise<ApiSuccess<StoreItemEntry[]>> {
-  const res = await http.get('/api/store/items', {
+  const res = await http.get('/store/items', {
     headers: token ? { Authorization: `Bearer ${token}` } : undefined,
   })
   return res.data as unknown as ApiSuccess<StoreItemEntry[]>
@@ -150,7 +150,7 @@ export async function submitStorePurchase(
   payload: PurchaseSubmitRequest,
   token?: string
 ): Promise<ApiSuccess<StoreOrder>> {
-  const res = await http.post('/api/store/purchase/submit', payload, {
+  const res = await http.post('/store/purchase/submit', payload, {
     headers: token ? { Authorization: `Bearer ${token}` } : undefined,
   })
   return res.data as unknown as ApiSuccess<StoreOrder>
@@ -163,7 +163,7 @@ export async function submitStoreExchange(
   payload: ExchangeRequest,
   token?: string
 ): Promise<ApiSuccess<AssetRedemption>> {
-  const res = await http.post('/api/store/exchange', payload, {
+  const res = await http.post('/store/exchange', payload, {
     headers: token ? { Authorization: `Bearer ${token}` } : undefined,
   })
   return res.data as unknown as ApiSuccess<AssetRedemption>
