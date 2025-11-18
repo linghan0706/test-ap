@@ -1,91 +1,79 @@
 import { NextResponse } from 'next/server'
 
-export const runtime = 'nodejs'
+export const runtime = 'nodejs'   // Vercel 使用 Node.js Runtime
 
-async function proxy(req: Request) {
-  const u = new URL(req.url)
-  const base = (process.env.API_BASE_URL || '').replace(/\/$/, '')
+async function proxy(req: Request, params: { path: string[] }) {
+  const base = process.env.API_BASE_URL?.replace(/\/$/, '')
   if (!base) {
     return NextResponse.json(
-      { success: false, message: 'API_BASE_URL not set', timestamp: Date.now() },
+      { success: false, message: 'API_BASE_URL not set' },
       { status: 500 }
     )
   }
-  const upstream = `${base}${u.pathname}${u.search}`
+
+  // 例如：前端访问 /api/proxy/tasks/center → 代理到 /api/tasks/center
+  const backendPath = `/api/${params.path.join('/')}`
+
+  const u = new URL(req.url)
+  const upstream = `${base}${backendPath}${u.search}`
 
   const headers = new Headers(req.headers)
   headers.delete('host')
-  headers.delete('origin')
-  headers.delete('referer')
-  const originalHost = req.headers.get('host') || ''
-  const proto = u.protocol === 'https:' ? 'https' : 'http'
-  if (originalHost) headers.set('x-forwarded-host', originalHost)
-  headers.set('x-forwarded-proto', proto)
-  const xf = req.headers.get('x-forwarded-for')
-  const xr = req.headers.get('x-real-ip')
-  if (xf) headers.set('x-forwarded-for', xf)
-  if (xr) headers.set('x-real-ip', xr)
-  const path = u.pathname
-  const requiresAuth =
-    path.startsWith('/api/store') || path === '/api/auth/logout'
-  if (requiresAuth) {
-    const auth = headers.get('authorization')
-    if (!auth) {
-      return NextResponse.json(
-        { success: false, message: 'Unauthorized', timestamp: Date.now() },
-        { status: 401 }
-      )
-    }
+
+  // 额外修复：Vercel 不自动转发 cookie，需要手动设置
+  const cookie = req.headers.get('cookie')
+  if (cookie) headers.set('cookie', cookie)
+
+  // body 处理
+  const body =
+    req.method === 'GET' || req.method === 'HEAD'
+      ? undefined
+      : await req.text()
+
+  if (body && !headers.get('content-type')) {
+    headers.set('content-type', 'application/json')
   }
 
-  const bodyText = ['GET', 'HEAD'].includes(req.method)
-    ? undefined
-    : await req.text()
-  const init: RequestInit = { method: req.method, headers, body: bodyText }
-  const res = await fetch(upstream, init)
+  const res = await fetch(upstream, {
+    method: req.method,
+    headers,
+    body,
+  })
+
   const contentType = res.headers.get('content-type') || ''
+  const proxyHeaders = new Headers(res.headers)
+  proxyHeaders.set('x-proxy-upstream', upstream)
+
   if (contentType.includes('application/json')) {
-    const data: unknown = await res.json()
-    const needsNormalize = u.pathname === '/api/auth/login'
-    const isObj = data && typeof data === 'object'
-    const hasStdShape = isObj && ('code' in (data as Record<string, unknown>) || 'success' in (data as Record<string, unknown>))
-    const normalized = needsNormalize && !hasStdShape
-      ? {
-          code: res.status,
-          success: res.status >= 200 && res.status < 300,
-          data,
-          message: '',
-          timestamp: Date.now(),
-        }
-      : data
-    const out = NextResponse.json(normalized, { status: res.status })
-    out.headers.set('x-proxy-upstream', upstream)
-    out.headers.set('x-proxy-runtime', 'nodejs')
-    return out
+    const data = await res.json()
+    return NextResponse.json(data, {
+      status: res.status,
+      headers: proxyHeaders,
+    })
   }
-  const text = await res.text()
-  const out = new NextResponse(text, { status: res.status })
-  out.headers.set('x-proxy-upstream', upstream)
-  out.headers.set('x-proxy-runtime', 'nodejs')
-  return out
+
+  return new NextResponse(await res.text(), {
+    status: res.status,
+    headers: proxyHeaders,
+  })
 }
 
-export async function GET(req: Request) {
-  return proxy(req)
+// 支持所有方法
+export async function GET(req: Request, ctx: any) {
+  return proxy(req, ctx.params)
 }
-
-export async function POST(req: Request) {
-  return proxy(req)
+export async function POST(req: Request, ctx: any) {
+  return proxy(req, ctx.params)
 }
-
-export async function PUT(req: Request) {
-  return proxy(req)
+export async function PUT(req: Request, ctx: any) {
+  return proxy(req, ctx.params)
 }
-
-export async function PATCH(req: Request) {
-  return proxy(req)
+export async function PATCH(req: Request, ctx: any) {
+  return proxy(req, ctx.params)
 }
-
-export async function DELETE(req: Request) {
-  return proxy(req)
+export async function DELETE(req: Request, ctx: any) {
+  return proxy(req, ctx.params)
+}
+export async function OPTIONS() {
+  return NextResponse.json({}, { status: 200 })
 }

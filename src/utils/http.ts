@@ -8,7 +8,7 @@ import axios, {
 
 // 计算基础地址：统一从环境变量读取后端服务地址，若未配置则退回同源
 function resolveBaseURL(): string {
-  return ''
+  return '/api/proxy'
 }
 
 // 创建 axios 实例（统一后端基础地址配置）
@@ -29,7 +29,7 @@ http.interceptors.request.use(
     // 添加认证 token（如果存在）
     const token = localStorage.getItem('telegram_auth_token') || localStorage.getItem('token')
     const url = config.url || ''
-    const isLogin = url.startsWith('/api/auth/login')
+    const isLogin = url.startsWith('/auth/login')
     if (token && config.headers && !isLogin) {
       config.headers.Authorization = `Bearer ${token}`
     }

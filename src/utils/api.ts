@@ -79,10 +79,10 @@ export async function telegramLogin(): Promise<TelegramLoginResponse | LoginErro
     // 3. 发送 POST 请求到后端
     const USE_INITDATA_HEADER = true
     const response = USE_INITDATA_HEADER
-      ? await http.post<TelegramLoginResponse>('/api/auth/login', requestData, {
+      ? await http.post<TelegramLoginResponse>('/auth/login', requestData, {
           headers: { 'X-Telegram-Init-Data': initDataResult.initData },
         })
-      : await httpUtils.post<TelegramLoginResponse>('/api/auth/login', requestData)
+      : await httpUtils.post<TelegramLoginResponse>('/auth/login', requestData)
 
     // 4. 验证响应数据
     if (!response || typeof response !== 'object') {
@@ -239,7 +239,7 @@ export async function telegramLogout(): Promise<BaseApiResponse> {
     
     // 可选：通知后端用户登出
     try {
-      await httpUtils.post('/api/auth/logout')
+      await httpUtils.post('/auth/logout')
     } catch (error) {
       console.warn('Failed to notify server about logout:', error)
       // 不影响本地登出流程
