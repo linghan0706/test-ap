@@ -10,6 +10,7 @@ import {
   isTelegramEnvironment,
 } from '@/telegramWebApp/telegrambot'
 import { initData, telegramLogin } from '@/utils/api'
+import { fetchTasksCenter } from '@/utils/api/task/api'
 export default function HomePage() {
 
 
@@ -52,7 +53,17 @@ export default function HomePage() {
     } else {
       console.warn('当前不在 Telegram 环境，跳过 SDK 参数读取与登录。')
     }
+    getTasksMain()
   }, [])
+  const getTasksMain=async()=>{
+    console.log('开始获取任务中心')
+    try{
+      const data = await fetchTasksCenter()
+      console.log('任务中心接口返回:', data)
+    }catch(e){
+      console.error('获取任务中心失败:', e)
+    }
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-900 via-blue-900 to-black relative overflow-hidden pb-20">

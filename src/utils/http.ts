@@ -5,6 +5,13 @@ import axios, {
   AxiosError,
   InternalAxiosRequestConfig,
 } from 'axios'
+import { AUTH_EXCLUDE_PATTERNS, AUTH_HEADER, BEARER_PREFIX } from '../config/auth'
+import {
+  getAccessToken,
+  setAccessToken,
+  clearAccessToken,
+  getRefreshToken,
+} from './auth/token'
 
 // 计算基础地址：统一从环境变量读取后端服务地址，若未配置则退回同源
 function resolveBaseURL(): string {
@@ -28,32 +35,37 @@ const authHttp: AxiosInstance = axios.create({
   },
 })
 
-// 请求拦截器
+type RequestConfigWithAuth = InternalAxiosRequestConfig & { skipAuth?: boolean }
+
+function isAuthExcluded(url: string): boolean {
+  const u = url || ''
+  return AUTH_EXCLUDE_PATTERNS.some(p => u.startsWith(p))
+}
+
+function shouldAttachAuth(config: RequestConfigWithAuth): boolean {
+  if ((config as any).skipAuth === true) return false
+  const url = config.url || ''
+  if (isAuthExcluded(url)) return false
+  return true
+}
+
 http.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
-    // 在发送请求之前做些什么
-    console.log('Sending request:', config.method?.toUpperCase(), config.url)
-
-    // 添加认证 token（如果存在）
-    const token = localStorage.getItem('telegram_auth_token') || localStorage.getItem('token')
-    const url = config.url || ''
-    const isLogin = url.startsWith('/auth/login')
-    if (token && config.headers && !isLogin) {
-      config.headers.Authorization = `Bearer ${token}`
-    }
-
-    // 添加时间戳防止缓存
-    if (config.method === 'get') {
-      config.params = {
-        ...config.params,
-        _t: Date.now(),
+    const cfg = config as RequestConfigWithAuth
+    if (shouldAttachAuth(cfg)) {
+      const token = getAccessToken()
+      if (token) {
+        cfg.headers = cfg.headers || {}
+        const v = token.startsWith(BEARER_PREFIX) ? token : `${BEARER_PREFIX}${token}`
+        if (!cfg.headers[AUTH_HEADER]) cfg.headers[AUTH_HEADER] = v
       }
     }
-
-    return config
+    if (cfg.method === 'get') {
+      cfg.params = { ...cfg.params, _t: Date.now() }
+    }
+    return cfg
   },
   (error: AxiosError) => {
-    // 对请求错误做些什么
     console.error('Request error:', error)
     return Promise.reject(error)
   }
@@ -112,12 +124,10 @@ http.interceptors.response.use(
           {
             const originalConfig = (error.response as AxiosResponse).config || {}
             const originalUrl = originalConfig.url || ''
-            const isAuthEndpoint = originalUrl.startsWith('/auth/login') || originalUrl.startsWith('/auth/refresh')
+            const isAuthEndpoint = isAuthExcluded(originalUrl)
             if (!isAuthEndpoint) {
               try {
-                const userStr = localStorage.getItem('telegram_user_info')
-                const user = userStr ? JSON.parse(userStr) : null
-                const refreshToken = user?.refreshToken
+                const refreshToken = getRefreshToken()
                 if (refreshToken) {
                   return authHttp
                     .post('/auth/refresh', { refreshToken })
@@ -137,25 +147,25 @@ http.interceptors.response.use(
                         }
                       }
                       if (newToken) {
-                        localStorage.setItem('telegram_auth_token', newToken)
+                        setAccessToken(newToken)
                         originalConfig.headers = originalConfig.headers || {}
-                        originalConfig.headers.Authorization = `Bearer ${newToken}`
+                        const v = newToken.startsWith(BEARER_PREFIX)
+                          ? newToken
+                          : `${BEARER_PREFIX}${newToken}`
+                        originalConfig.headers[AUTH_HEADER] = v
                         return http.request(originalConfig)
                       }
-                      localStorage.removeItem('token')
-                      localStorage.removeItem('telegram_auth_token')
+                      clearAccessToken()
                       return Promise.reject(new Error('Token refresh failed'))
                     })
                     .catch(() => {
-                      localStorage.removeItem('token')
-                      localStorage.removeItem('telegram_auth_token')
+                      clearAccessToken()
                       return Promise.reject(new Error('Unauthorized'))
                     })
                 }
               } catch {}
             }
-            localStorage.removeItem('token')
-            localStorage.removeItem('telegram_auth_token')
+            clearAccessToken()
           }
           break
         case 403:
@@ -185,7 +195,8 @@ http.interceptors.response.use(
           errorMessage = data.error as string
         }
       }
-      const upstream = headers && (headers['x-proxy-upstream'] as string | undefined)
+      const upstream =
+        headers && (headers['x-proxy-upstream'] as string | undefined)
       if (upstream) {
         console.error('Upstream:', upstream)
       }
