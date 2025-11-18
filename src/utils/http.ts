@@ -20,6 +20,14 @@ const http: AxiosInstance = axios.create({
   },
 })
 
+const authHttp: AxiosInstance = axios.create({
+  baseURL: resolveBaseURL() || '',
+  timeout: 10000,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+})
+
 // 请求拦截器
 http.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
@@ -101,11 +109,54 @@ http.interceptors.response.use(
           break
         case 401:
           errorMessage = 'Unauthorized, please login again'
-          // 清除本地 token
-          localStorage.removeItem('token')
-          localStorage.removeItem('telegram_auth_token')
-          // 可以在这里跳转到登录页
-          // window.location.href = '/login'
+          {
+            const originalConfig = (error.response as AxiosResponse).config || {}
+            const originalUrl = originalConfig.url || ''
+            const isAuthEndpoint = originalUrl.startsWith('/auth/login') || originalUrl.startsWith('/auth/refresh')
+            if (!isAuthEndpoint) {
+              try {
+                const userStr = localStorage.getItem('telegram_user_info')
+                const user = userStr ? JSON.parse(userStr) : null
+                const refreshToken = user?.refreshToken
+                if (refreshToken) {
+                  return authHttp
+                    .post('/auth/refresh', { refreshToken })
+                    .then(res => {
+                      const rdata = res.data
+                      let newToken: string | undefined
+                      if (rdata && typeof rdata === 'object') {
+                        if ('code' in rdata) {
+                          if (rdata.code === 200 || rdata.code === 0) {
+                            const payload = rdata.data || rdata
+                            newToken = payload?.accessToken
+                          }
+                        } else if ('success' in rdata) {
+                          if (rdata.success && rdata.data) {
+                            newToken = rdata.data.accessToken
+                          }
+                        }
+                      }
+                      if (newToken) {
+                        localStorage.setItem('telegram_auth_token', newToken)
+                        originalConfig.headers = originalConfig.headers || {}
+                        originalConfig.headers.Authorization = `Bearer ${newToken}`
+                        return http.request(originalConfig)
+                      }
+                      localStorage.removeItem('token')
+                      localStorage.removeItem('telegram_auth_token')
+                      return Promise.reject(new Error('Token refresh failed'))
+                    })
+                    .catch(() => {
+                      localStorage.removeItem('token')
+                      localStorage.removeItem('telegram_auth_token')
+                      return Promise.reject(new Error('Unauthorized'))
+                    })
+                }
+              } catch {}
+            }
+            localStorage.removeItem('token')
+            localStorage.removeItem('telegram_auth_token')
+          }
           break
         case 403:
           errorMessage = 'Access denied'

@@ -79,7 +79,8 @@ export async function telegramLogin(): Promise<TelegramLoginResponse | LoginErro
     // 3. 发送登录请求（优先 header-only，401/缺少令牌时回退 JSON body）
     const response = await httpUtils.post<TelegramLoginResponse>(
       '/auth/login',
-      requestData
+      requestData,
+      { headers: { 'X-Telegram-Init-Data': initDataResult.initData } }
     )
 
     // 4. 验证响应数据
