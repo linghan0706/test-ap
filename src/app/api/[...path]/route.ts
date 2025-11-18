@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server'
 
 export const runtime = 'nodejs'   // Vercel 使用 Node.js Runtime
 
+type RouteContext = { params: { path: string[] } }
+
 async function proxy(req: Request, params: { path: string[] }) {
   const base = process.env.API_BASE_URL?.replace(/\/$/, '')
   if (!base) {
@@ -59,19 +61,19 @@ async function proxy(req: Request, params: { path: string[] }) {
 }
 
 // 支持所有方法
-export async function GET(req: Request, ctx: any) {
+export async function GET(req: Request, ctx: RouteContext) {
   return proxy(req, ctx.params)
 }
-export async function POST(req: Request, ctx: any) {
+export async function POST(req: Request, ctx: RouteContext) {
   return proxy(req, ctx.params)
 }
-export async function PUT(req: Request, ctx: any) {
+export async function PUT(req: Request, ctx: RouteContext) {
   return proxy(req, ctx.params)
 }
-export async function PATCH(req: Request, ctx: any) {
+export async function PATCH(req: Request, ctx: RouteContext) {
   return proxy(req, ctx.params)
 }
-export async function DELETE(req: Request, ctx: any) {
+export async function DELETE(req: Request, ctx: RouteContext) {
   return proxy(req, ctx.params)
 }
 export async function OPTIONS() {
