@@ -13,8 +13,9 @@ async function proxy(req: Request, params: RouteParams) {
     )
   }
 
-  // 例如：前端访问 /api/proxy/tasks/center → 代理到 /api/tasks/center
-  const backendPath = `/api/${params.path.join('/')}`
+  const segments = params.path || []
+  const trimmed = segments[0] === 'proxy' ? segments.slice(1) : segments
+  const backendPath = `/api/${trimmed.join('/')}`
 
   const u = new URL(req.url)
   const upstream = `${base}${backendPath}${u.search}`
