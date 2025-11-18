@@ -83,34 +83,47 @@ export async function telegramLogin(): Promise<TelegramLoginResponse | LoginErro
       response = await httpUtils.post<TelegramLoginResponse>(
         '/auth/login',
         undefined,
-        { headers: initHeaders }
+        { headers: { ...initHeaders, 'Content-Type': 'text/plain' } }
       )
     } catch (err1) {
       const msg1 = err1 instanceof Error ? err1.message : ''
       const retryJson =
         msg1.includes('缺少访问令牌') ||
         msg1.includes('Unauthorized') ||
-        msg1.includes('401')
+        msg1.includes('401') ||
+        msg1.includes('Unsupported Media Type') ||
+        msg1.includes('415')
       if (!retryJson) throw err1
       try {
         response = await httpUtils.post<TelegramLoginResponse>(
           '/auth/login',
           requestData,
-          { headers: initHeaders }
+          { headers: { ...initHeaders, 'Content-Type': 'application/json' } }
         )
       } catch (err2) {
         const msg2 = err2 instanceof Error ? err2.message : ''
         const retryQuery =
           msg2.includes('缺少访问令牌') ||
           msg2.includes('Unauthorized') ||
-          msg2.includes('401')
+          msg2.includes('401') ||
+          msg2.includes('Unsupported Media Type') ||
+          msg2.includes('415')
         if (!retryQuery) throw err2
-        const encoded = encodeURIComponent(initDataResult.initData)
-        response = await httpUtils.post<TelegramLoginResponse>(
-          `/auth/login?initData=${encoded}`,
-          undefined,
-          { headers: initHeaders }
-        )
+        try {
+          const encoded = encodeURIComponent(initDataResult.initData)
+          response = await httpUtils.post<TelegramLoginResponse>(
+            `/auth/login?initData=${encoded}`,
+            undefined,
+            { headers: initHeaders }
+          )
+        } catch (err3) {
+          const formBody = `initData=${encodeURIComponent(initDataResult.initData)}`
+          response = await httpUtils.post<TelegramLoginResponse>(
+            '/auth/login',
+            formBody,
+            { headers: { ...initHeaders, 'Content-Type': 'application/x-www-form-urlencoded' } }
+          )
+        }
       }
     }
 
