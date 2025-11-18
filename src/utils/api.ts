@@ -76,13 +76,28 @@ export async function telegramLogin(): Promise<TelegramLoginResponse | LoginErro
     }
     console.log('Sending Telegram login request...')
 
-    // 3. 发送 POST 请求到后端
-    const USE_INITDATA_HEADER = true
-    const response = USE_INITDATA_HEADER
-      ? await httpUtils.post<TelegramLoginResponse>('/auth/login', requestData, {
-          headers: { 'X-Telegram-Init-Data': initDataResult.initData },
-        })
-      : await httpUtils.post<TelegramLoginResponse>('/auth/login', requestData)
+    // 3. 发送登录请求（优先 header-only，401/缺少令牌时回退 JSON body）
+    const initHeaders = { 'X-Telegram-Init-Data': initDataResult.initData }
+    let response: TelegramLoginResponse
+    try {
+      response = await httpUtils.post<TelegramLoginResponse>(
+        '/auth/login',
+        undefined,
+        { headers: initHeaders }
+      )
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : ''
+      const shouldRetry =
+        msg.includes('缺少访问令牌') ||
+        msg.includes('Unauthorized') ||
+        msg.includes('401')
+      if (!shouldRetry) throw err
+      response = await httpUtils.post<TelegramLoginResponse>(
+        '/auth/login',
+        requestData,
+        { headers: initHeaders }
+      )
+    }
 
     // 4. 验证响应数据
     if (!response || typeof response !== 'object') {
